@@ -2,13 +2,14 @@
 /**
  * 从 ZJZ0405/awesome-skills 同步《使用说明》里的事实块。
  *
- * 只重写标记之间的内容（版本、技能表、工具别名数、上游提交），正文保持手写。
+ * 只重写标记之间的内容（技能表、下载按钮、工具别名数、上游提交），正文保持手写。
  * 数据来源：
  *   - VERSION            仓库版本
  *   - catalog.json       技能名 / 描述 / 许可证
  *   - sources.json       原创与收录来源
  *   - lib/agents.tsv     工具别名数量
  *   - GitHub API/Atom    最近一次提交
+ *   - Releases API       最新 tag 的预构建包
  *
  * 用法：
  *   node scripts/sync-awesome-skills.mjs
@@ -34,7 +35,13 @@ const POST_PATH = fileURLToPath(
 );
 const START_MARKER = "<!-- awesome-skills:catalog:start -->";
 const END_MARKER = "<!-- awesome-skills:catalog:end -->";
+const DOWNLOAD_START_MARKER = "<!-- awesome-skills:download:start -->";
+const DOWNLOAD_END_MARKER = "<!-- awesome-skills:download:end -->";
+const RELEASES_URL = `${REPO_URL}/releases`;
+const LATEST_RELEASE_URL = `https://api.github.com/repos/${OWNER}/${REPO}/releases/latest`;
 const DESC_LIMIT = 88;
+const DOWNLOAD_ICON =
+	'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>';
 
 const args = new Set(process.argv.slice(2));
 const checkOnly = args.has("--check");
@@ -164,6 +171,57 @@ async function getCommit() {
 	}
 }
 
+async function getLatestRelease() {
+	try {
+		const data = parseJson(
+			await fetchText(LATEST_RELEASE_URL, { authenticated: true }),
+			"latest release API",
+		);
+		if (!data?.tag_name) throw new Error("响应里没有 tag_name");
+
+		const assets = Array.isArray(data.assets) ? data.assets : [];
+		const findAsset = (suffix) =>
+			assets.find(
+				(asset) => asset?.name?.endsWith(suffix) && asset.browser_download_url,
+			);
+		const pick = (asset) =>
+			asset
+				? {
+						name: asset.name,
+						size: asset.size,
+						url: asset.browser_download_url,
+					}
+				: null;
+
+		return {
+			tag: data.tag_name,
+			url: data.html_url ?? `${RELEASES_URL}/tag/${data.tag_name}`,
+			publishedAt: data.published_at ? new Date(data.published_at) : null,
+			tarball: pick(findAsset(".tar.gz")),
+			checksum: pick(findAsset(".tar.gz.sha256")),
+			zip: pick(findAsset(".zip")),
+		};
+	} catch (error) {
+		console.warn(`未能获取最新 Release，下载按钮保持原样：${error.message}`);
+		return null;
+	}
+}
+
+function escapeHtml(value) {
+	return String(value ?? "")
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;");
+}
+
+function formatBytes(bytes) {
+	if (!Number.isFinite(bytes) || bytes <= 0) return "";
+	if (bytes >= 1_000_000) return `${(bytes / 1_000_000).toFixed(1)} MB`;
+	if (bytes >= 1_000) return `${Math.round(bytes / 1_000)} KB`;
+	return `${bytes} B`;
+}
+
 function clip(text, limit) {
 	const normalized = String(text ?? "")
 		.replace(/`/g, "'")
@@ -231,26 +289,83 @@ function buildBlock({ version, commit, skills, sources, toolCount }) {
 	].join("\n");
 }
 
-function replaceBlock(markdown, block) {
-	const start = markdown.indexOf(START_MARKER);
-	const end = markdown.indexOf(END_MARKER);
+function buildDownloadBlock(release) {
+	if (!release.tarball) {
+		return [
+			DOWNLOAD_START_MARKER,
+			'<div class="awesome-download">',
+			'<div class="download-info">',
+			'<div class="download-eyebrow">Latest release</div>',
+			`<div class="download-title">${escapeHtml(release.tag)} 还没有预构建包</div>`,
+			'<div class="download-meta">可以先用下面的「自己打包」流程，或去 Release 页面看看。</div>',
+			"</div>",
+			`<div class="download-actions"><a class="download-btn no-styling" href="${escapeHtml(release.url)}" target="_blank" rel="noopener">打开 Releases ↗</a></div>`,
+			"</div>",
+			DOWNLOAD_END_MARKER,
+		].join("\n");
+	}
+
+	const meta = [
+		formatBytes(release.tarball.size),
+		release.publishedAt ? ymd(release.publishedAt) : "",
+		"无需 clone / 打包",
+	]
+		.filter(Boolean)
+		.join(" · ");
+
+	const actions = [
+		`<a class="download-btn no-styling" href="${escapeHtml(release.tarball.url)}" title="下载 ${escapeHtml(release.tarball.name)}">${DOWNLOAD_ICON}下载 .tar.gz</a>`,
+	];
+	if (release.checksum) {
+		actions.push(
+			`<a class="download-btn secondary no-styling" href="${escapeHtml(release.checksum.url)}" title="下载 ${escapeHtml(release.checksum.name)}">SHA-256</a>`,
+		);
+	}
+	if (release.zip) {
+		actions.push(
+			`<a class="download-btn secondary no-styling" href="${escapeHtml(release.zip.url)}" title="下载 ${escapeHtml(release.zip.name)}">.zip</a>`,
+		);
+	}
+
+	return [
+		DOWNLOAD_START_MARKER,
+		'<div class="awesome-download">',
+		'<div class="download-info">',
+		'<div class="download-eyebrow">Latest release</div>',
+		`<div class="download-title">${escapeHtml(release.tag)} 预构建包</div>`,
+		`<div class="download-meta">${escapeHtml(meta)}</div>`,
+		`<a class="download-release-link no-styling" href="${escapeHtml(release.url)}" target="_blank" rel="noopener">release notes ↗</a> · <a class="download-release-link no-styling" href="${RELEASES_URL}" target="_blank" rel="noopener">所有版本</a>`,
+		"</div>",
+		'<div class="download-actions">',
+		...actions.map((action) => `  ${action}`),
+		"</div>",
+		"</div>",
+		DOWNLOAD_END_MARKER,
+	].join("\n");
+}
+
+function getBlock(markdown, startMarker, endMarker, label) {
+	const start = markdown.indexOf(startMarker);
+	const end = markdown.indexOf(endMarker);
 	if (start === -1 || end === -1 || end < start) {
 		throw new Error(
-			`找不到标记块，请确认 ${path.relative(process.cwd(), POST_PATH)} 里有 ${START_MARKER} 和 ${END_MARKER}`,
+			`找不到${label}标记块，请确认 ${path.relative(process.cwd(), POST_PATH)} 里有 ${startMarker} 和 ${endMarker}`,
+		);
+	}
+	return markdown.slice(start, end + endMarker.length);
+}
+
+function setBlock(markdown, block, startMarker, endMarker, label) {
+	const start = markdown.indexOf(startMarker);
+	const end = markdown.indexOf(endMarker);
+	if (start === -1 || end === -1 || end < start) {
+		throw new Error(
+			`找不到${label}标记块，请确认 ${path.relative(process.cwd(), POST_PATH)} 里有 ${startMarker} 和 ${endMarker}`,
 		);
 	}
 	return (
-		markdown.slice(0, start) + block + markdown.slice(end + END_MARKER.length)
+		markdown.slice(0, start) + block + markdown.slice(end + endMarker.length)
 	);
-}
-
-function currentBlock(markdown) {
-	const start = markdown.indexOf(START_MARKER);
-	const end = markdown.indexOf(END_MARKER);
-	if (start === -1 || end === -1 || end < start) {
-		throw new Error(`找不到标记块：${START_MARKER} … ${END_MARKER}`);
-	}
-	return markdown.slice(start, end + END_MARKER.length);
 }
 
 function bumpUpdated(markdown, date) {
@@ -266,13 +381,14 @@ async function main() {
 	}
 
 	const markdown = await readFile(POST_PATH, "utf8");
-	const [versionText, catalogText, sourcesText, agentsText, commit] =
+	const [versionText, catalogText, sourcesText, agentsText, commit, release] =
 		await Promise.all([
 			fetchText(`${RAW_BASE}/VERSION`),
 			fetchText(`${RAW_BASE}/catalog.json`),
 			fetchText(`${RAW_BASE}/sources.json`),
 			fetchText(`${RAW_BASE}/lib/agents.tsv`),
 			getCommit(),
+			getLatestRelease(),
 		]);
 
 	const version = versionText.trim();
@@ -304,39 +420,71 @@ async function main() {
 		.filter((line) => line && !line.startsWith("#")).length;
 	if (toolCount === 0) throw new Error("lib/agents.tsv 里没有解析到工具别名");
 
-	const block = buildBlock({
+	const catalogBlock = buildBlock({
 		version,
 		commit,
 		skills,
 		sources,
 		toolCount,
 	});
-	const existing = currentBlock(markdown);
+	const downloadBlock = release ? buildDownloadBlock(release) : null;
 
-	if (existing === block) {
+	const catalogChanged =
+		getBlock(markdown, START_MARKER, END_MARKER, "技能清单") !== catalogBlock;
+	const downloadChanged = downloadBlock
+		? getBlock(
+				markdown,
+				DOWNLOAD_START_MARKER,
+				DOWNLOAD_END_MARKER,
+				"下载按钮",
+			) !== downloadBlock
+		: false;
+
+	if (!catalogChanged && !downloadChanged) {
 		console.log(
 			`说明已是最新：${skills.length} 个技能 · ${toolCount} 个工具别名（${commit.short}）。`,
 		);
 		return;
 	}
 
+	const changedLabels = [
+		catalogChanged ? "技能清单" : "",
+		downloadChanged ? "下载按钮" : "",
+	]
+		.filter(Boolean)
+		.join("、");
+
 	if (checkOnly) {
 		console.error(
-			`说明已过期：上游为 ${skills.length} 个技能 · ${toolCount} 个工具别名（${commit.short}），请运行 pnpm sync:skills。`,
+			`说明已过期（${changedLabels}）：上游为 ${skills.length} 个技能 · ${toolCount} 个工具别名（${commit.short}），请运行 pnpm sync:skills。`,
 		);
 		process.exitCode = 1;
 		return;
 	}
 
 	if (dryRun) {
-		console.log(block);
+		if (catalogChanged) console.log(`--- 技能清单 ---\n${catalogBlock}`);
+		if (downloadChanged) console.log(`--- 下载按钮 ---\n${downloadBlock}`);
 		return;
 	}
 
-	const next = bumpUpdated(replaceBlock(markdown, block), ymd(new Date()));
+	let next = markdown;
+	if (catalogChanged) {
+		next = setBlock(next, catalogBlock, START_MARKER, END_MARKER, "技能清单");
+	}
+	if (downloadChanged) {
+		next = setBlock(
+			next,
+			downloadBlock,
+			DOWNLOAD_START_MARKER,
+			DOWNLOAD_END_MARKER,
+			"下载按钮",
+		);
+	}
+	next = bumpUpdated(next, ymd(new Date()));
 	await writeFile(POST_PATH, next, "utf8");
 	console.log(
-		`已同步：${skills.length} 个技能 · ${toolCount} 个工具别名（${commit.short}）-> ${path.relative(process.cwd(), POST_PATH)}`,
+		`已同步（${changedLabels}）：${skills.length} 个技能 · ${toolCount} 个工具别名（${commit.short}）-> ${path.relative(process.cwd(), POST_PATH)}`,
 	);
 }
 

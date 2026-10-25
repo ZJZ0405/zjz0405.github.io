@@ -16,7 +16,40 @@ Claude Code 读 `~/.claude/skills`，Cursor 读 `~/.cursor/skills`，Codex、DSH
 
 ## 30 秒上手
 
-### 联网机器：打包
+### 直接下载预构建包
+
+下面的按钮始终指向最新 tag 的 release 资产，不需要 clone，也不需要打包。
+
+<!-- awesome-skills:download:start -->
+<div class="awesome-download">
+<div class="download-info">
+<div class="download-eyebrow">Latest release</div>
+<div class="download-title">v0.1.1 预构建包</div>
+<div class="download-meta">1.7 MB · 2026-10-24 · 无需 clone / 打包</div>
+<a class="download-release-link no-styling" href="https://github.com/ZJZ0405/awesome-skills/releases/tag/v0.1.1" target="_blank" rel="noopener">release notes ↗</a> · <a class="download-release-link no-styling" href="https://github.com/ZJZ0405/awesome-skills/releases" target="_blank" rel="noopener">所有版本</a>
+</div>
+<div class="download-actions">
+  <a class="download-btn no-styling" href="https://github.com/ZJZ0405/awesome-skills/releases/download/v0.1.1/awesome-skills-0.1.1.tar.gz" title="下载 awesome-skills-0.1.1.tar.gz"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>下载 .tar.gz</a>
+  <a class="download-btn secondary no-styling" href="https://github.com/ZJZ0405/awesome-skills/releases/download/v0.1.1/awesome-skills-0.1.1.tar.gz.sha256" title="下载 awesome-skills-0.1.1.tar.gz.sha256">SHA-256</a>
+  <a class="download-btn secondary no-styling" href="https://github.com/ZJZ0405/awesome-skills/releases/download/v0.1.1/awesome-skills-0.1.1.zip" title="下载 awesome-skills-0.1.1.zip">.zip</a>
+</div>
+</div>
+<!-- awesome-skills:download:end -->
+
+GitHub 下载慢或打不开时，直接用下面的「自己打包」流程。
+
+### 校验、解压、安装
+
+```sh
+shasum -a 256 -c awesome-skills-*.tar.gz.sha256   # Linux 用 sha256sum -c
+tar xzf awesome-skills-*.tar.gz
+cd awesome-skills-*/
+./install.sh --tool auto
+```
+
+这里用通配符匹配刚下载的版本；如果目录里有多个版本，换成具体文件名。装完**重开 agent 会话**，很多工具只在启动时扫描 skills 目录。
+
+### 或者：自己打包
 
 ```sh
 git clone https://github.com/ZJZ0405/awesome-skills.git
@@ -27,20 +60,9 @@ ls dist/
 # awesome-skills-0.1.1.tar.gz.sha256
 ```
 
-`pack.sh` 会排除 `.git`、`dist/`、`__pycache__` 和本机安装目录；加 `--zip` 可以额外生成 zip。版本号取自仓库根目录的 `VERSION`，所以文件名会随版本变。
+`pack.sh` 会排除 `.git`、`dist/`、`__pycache__` 和本机安装目录；加 `--zip` 可以额外生成 zip。版本号取自仓库根目录的 `VERSION`，所以文件名会随版本变。把这两个文件拷到离线机器后，执行的仍是上面的校验、解压、安装命令。
 
-### 离线机器：校验、解压、安装
-
-```sh
-shasum -a 256 -c awesome-skills-0.1.1.tar.gz.sha256   # Linux 用 sha256sum -c
-tar xzf awesome-skills-0.1.1.tar.gz
-cd awesome-skills-0.1.1
-./install.sh --tool auto
-```
-
-装完**重开 agent 会话**，很多工具只在启动时扫描 skills 目录。
-
-> 不想打包也可以：`git clone` 后把整个目录拷过去，运行 `./install.sh --tool auto`。安装过程同样不联网。
+> 已经 clone 了仓库的话，也可以直接运行 `./install.sh --tool auto`，安装过程同样不联网。
 
 ## 常用命令
 
@@ -180,14 +202,16 @@ python3 scripts/sync_upstreams.py --prune            # 清理上游已删除的�
 
 ## 这份说明怎么保持更新
 
-这一页里最容易过期的不是命令，而是**技能数量、版本和清单**。所以正文手写，只把易变事实放进一对以 `awesome-skills:catalog` 命名的 HTML 注释标记之间；脚本只替换这一段，不碰其他文字。
+这一页里最容易过期的不是命令，而是**技能数量、版本、清单和下载链接**。所以正文手写，只把易变事实放进两组以 `awesome-skills:catalog` / `awesome-skills:download` 命名的 HTML 注释标记之间；脚本只替换这两段，不碰其他文字。
 
-博客仓库里的 `scripts/sync-awesome-skills.mjs` 会拉取上游的 `VERSION`、`catalog.json`、`sources.json` 和 `lib/agents.tsv`，重写这段表格，并顺带更新 frontmatter 的 `updated`。上游 README 的技能表本来就是 `scripts/catalog.py` 的产物，所以这里不解析 README 散文，只读同一批机器可读文件。本地手动同步：
+博客仓库里的 `scripts/sync-awesome-skills.mjs` 会拉取上游的 `VERSION`、`catalog.json`、`sources.json` 和 `lib/agents.tsv`，同时请求 GitHub Releases 的 latest，重写技能表和下载按钮，并顺带更新 frontmatter 的 `updated`。上游 README 的技能表本来就是 `scripts/catalog.py` 的产物，所以这里不解析 README 散文，只读同一批机器可读文件。本地手动同步：
 
 ```sh
 pnpm sync:skills          # 重写标记块
 pnpm sync:skills:check    # 只检查；过期时退出码 1
 ```
+
+Releases API 临时失败时会保留旧按钮，只更新技能表，不会把下载卡片清空。
 
 GitHub Actions 每天北京时间 09:17 跑一次，只有生成内容变化才提交；提交之后显式触发一次 Pages 部署。原因很实际：`GITHUB_TOKEN` 推的 commit 不会触发其他 workflow，不补这一步，仓库更新了但网站不会重建。
 

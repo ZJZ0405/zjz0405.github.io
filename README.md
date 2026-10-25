@@ -76,15 +76,21 @@ HTML 更新时替换同名文件即可。iframe 加 `?embed=1` 隐藏页面外�
 
 `src/content/posts/tools/awesome-skills.md` 是 [awesome-skills](https://github.com/ZJZ0405/awesome-skills) 的安装与使用说明，`category: Tools`。
 
-文章里只有标记块内的版本号、技能表、工具别名数由脚本生成，正文手写：
+文章里只有两组标记块内的版本号、技能表、工具别名数和最新 release 下载按钮由脚本生成，正文手写：
 
 ```md
 <!-- awesome-skills:catalog:start -->
 ...
 <!-- awesome-skills:catalog:end -->
+
+<!-- awesome-skills:download:start -->
+...
+<!-- awesome-skills:download:end -->
 ```
 
-脚本 `scripts/sync-awesome-skills.mjs`（零依赖，Node 18+）拉取上游 `VERSION`、`catalog.json`、`sources.json`、`lib/agents.tsv`，再通过 GitHub API（失败时回退到 commits Atom feed）取最近提交，重写标记块并更新 frontmatter 的 `updated`：
+脚本 `scripts/sync-awesome-skills.mjs`（零依赖，Node 18+）拉取上游 `VERSION`、`catalog.json`、`sources.json`、`lib/agents.tsv`，再通过 GitHub API（失败时回退到 commits Atom feed）取最近提交；同时请求 GitHub Releases latest，取最新 tag 的 `.tar.gz` / `.sha256` / `.zip` 资产。它重写技能清单和下载按钮，并更新 frontmatter 的 `updated`；Releases API 失败时保留旧按钮，只更新技能清单。卡片样式在 `src/styles/markdown.css`。
+
+本地命令：
 
 ```bash
 pnpm sync:skills                                  # 手动同步
