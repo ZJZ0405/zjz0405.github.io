@@ -58,12 +58,12 @@ draft: false
 
 ## LLM Engine 图集
 
-`src/content/posts/llm-engine/` 按引擎归档 Archify 生成的交互图，文章统一 `category: LLM Engine`，
-正文用 iframe 引用 `public/demos/llm-engine/<engine>/` 下的自包含 HTML：
+`src/content/posts/llm-engine/` 按引擎整理，一个引擎一篇，文章统一 `category: LLM Engine`。
+正文按图分节，用 iframe 引用 `public/demos/llm-engine/<engine>/` 下的自包含 HTML：
 
-- vLLM：`vllm/chat-completion-request.md`
-- SGLang：`sglang/gateway-request.md`、`sglang/engine-request.md`
-- DeepInfer：`deepinfer/generate-request.md`、`deepinfer/scheduler-kv.md`、`deepinfer/event-topology.md`
+- vLLM：`vllm/index.md`（1 张：聊天补全请求）
+- SGLang：`sglang/index.md`（2 张：网关请求、引擎请求）
+- DeepInfer：`deepinfer/index.md`（3 张：事件拓扑、单请求时序、调度与 KV）
 
 HTML 更新时替换同名文件即可。iframe 加 `?embed=1` 隐藏页面外壳只留图，`?present=1` 进入演示模式。
 
