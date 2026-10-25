@@ -9890,6 +9890,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 
       svg.addEventListener('click', function (event) {
         if (container.getAttribute('data-just-panned') === 'true') return;
+        if (document.documentElement.getAttribute('data-embed') === 'true') return;
         var node = event.target.closest('[data-node-id]');
         if (node) {
           var id = node.getAttribute('data-node-id');
