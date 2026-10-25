@@ -397,6 +397,18 @@ $$
 
 反过来，$\lVert xH\rVert_\infty\le\lVert x\rVert_2$ 对任何正交矩阵都成立，这是“单个坐标不能超过总长度”。Hadamard 的特别之处是它把这个上界压到了 $1/\sqrt d$ 的**矩阵元素**层面，从而对稀疏 $x$ 给出与分布无关的紧界；它不是让所有 $x$ 的峰值都最小。
 
+### 3.6 一个闭环：稀疏 → 稠密 → 稀疏
+
+下面的动画把 $X\mapsto XH$ 走两遍。$X$ 是一个 $32\times32$ 的激活矩阵：行是 token，列是通道；少数通道和几个孤立位置带有离群值。右乘 $H$ 后，能量摊到所有通道；再右乘**同一个** $H$，因为 $H^2=I$，严格回到 $X$。
+
+<video src="/videos/hadamard-loop.mp4" poster="/images/quantization/hadamard-loop-poster.png" autoplay loop muted playsinline style="width:100%;border-radius:12px;display:block;background:#0f172a">
+  <img src="/videos/hadamard-loop.gif" alt="Hadamard loop: sparse → dense → sparse">
+</video>
+
+*动画 1：$X\to XH\to XH^2=X$。热图每帧按自身最大值归一化，颜色只表示相对结构；变换本身保 Frobenius 范数 $\lVert XH\rVert_F=\lVert X\rVert_F$。注意第二次必须用同一个 $H$；若换成随机符号变体 $H'=DH$，则 $H'^2\ne I$，第二次要用 $H'^{-1}=HD$ 才能回到原矩阵。*
+
+这里演示的是**沿通道维右乘** $H$，也就是量化里对激活做的事，不是把整张矩阵做二维变换。二维版本 $H_T X H_d$ 同样满足平方为恒等（对 token 维和通道维分别用相应阶数的 $H$），但混合的是两个方向。
+
 ## 4. 快速变换：d log d 是怎么来的
 
 ### 4.1 从递推到蝶形
