@@ -62,6 +62,46 @@ draft: false
 - `navBarConfig`：导航项
 - `profileConfig`：头像、昵称、简介、社交链接
 
+## 头像与站点图标
+
+侧边栏头像 `public/avatar.jpg` 取自 GitHub 用户头像（`https://avatars.githubusercontent.com/u/105736491`，最大 460×460），
+下载到仓库里本地引用，避免国内访问 GitHub CDN 不稳定。想自动跟随 GitHub 头像，可把 `profileConfig.avatar`
+改成直链 `https://github.com/ZJZ0405.png?size=460`。
+
+浏览器标签页图标由同一张头像裁切生成，裁切区域为原图 `(60, 30, 330, 300)`，圆角 22%：
+
+```bash
+python3 - <<'PY'
+from PIL import Image, ImageDraw, ImageFilter
+
+crop = Image.open("public/avatar.jpg").convert("RGB").crop((60, 30, 330, 300))
+
+def rounded(img, rr=0.22):
+    n = img.size[0]
+    m = Image.new("L", (n * 4, n * 4), 0)
+    ImageDraw.Draw(m).rounded_rectangle([0, 0, n * 4 - 1, n * 4 - 1], radius=int(n * 4 * rr), fill=255)
+    out = Image.new("RGBA", (n, n), (0, 0, 0, 0))
+    out.paste(img.convert("RGBA"), (0, 0), m.resize((n, n), Image.LANCZOS))
+    return out
+
+def make(size, radius=True):
+    im = crop.resize((size, size), Image.LANCZOS)
+    im = im.filter(ImageFilter.UnsharpMask(radius=1.2, percent=60, threshold=2))
+    return rounded(im) if radius else im
+
+def save_png(im, path):  # 量化到 255 色，压到原来的 1/4
+    q = im.quantize(colors=255, method=Image.FASTOCTREE) if im.mode == "RGBA" else im.quantize(colors=255)
+    q.save(path, optimize=True)
+
+for size in (32, 128, 192):
+    save_png(make(size), f"public/favicon/favicon-{size}.png")
+save_png(make(180, radius=False), "public/favicon/favicon-180.png")  # iOS 自己裁圆角
+make(48).save("public/favicon.ico", sizes=[(16, 16), (32, 32), (48, 48)])
+PY
+```
+
+图标列表在 `src/constants/icon.ts` 的 `defaultFavicons`；`siteConfig.favicon` 留空即用这份默认值。
+
 ## 自定义域名
 
 1. `public/CNAME` 写入域名。
