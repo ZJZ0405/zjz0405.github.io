@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Canvas 粒子演示</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #0b1020; overflow: hidden; }
+  canvas { display: block; width: 100%; height: 100%; }
+  .hint {
+    position: fixed; left: 14px; bottom: 12px; color: #7c8aa5;
+    font: 12px/1.4 ui-monospace, Menlo, Consolas, monospace; pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="hint">move your cursor</div>
+<script>
+  const canvas = document.getElementById('c');
+  const ctx = canvas.getContext('2d');
+  const pointer = { x: -999, y: -999 };
+  let dots = [];
+
+  function resize() {
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = canvas.clientWidth * dpr;
+    canvas.height = canvas.clientHeight * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const count = Math.min(120, Math.round(canvas.clientWidth / 8));
+    dots = Array.from({ length: count }, () => ({
+      x: Math.random() * canvas.clientWidth,
+      y: Math.random() * canvas.clientHeight,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.4,
+      r: Math.random() * 1.6 + 0.6,
+    }));
+  }
+
+  function frame() {
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+    ctx.fillStyle = 'rgba(11, 16, 32, 0.35)';
+    ctx.fillRect(0, 0, w, h);
+
+    for (const d of dots) {
+      d.x += d.vx;
+      d.y += d.vy;
+      if (d.x < 0 || d.x > w) d.vx *= -1;
+      if (d.y < 0 || d.y > h) d.vy *= -1;
+      const dx = d.x - pointer.x;
+      const dy = d.y - pointer.y;
+      const dist = Math.hypot(dx, dy);
+      if (dist < 120) {
+        d.x += (dx / (dist || 1)) * 1.2;
+        d.y += (dy / (dist || 1)) * 1.2;
+      }
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(122, 162, 255, 0.85)';
+      ctx.fill();
+    }
+
+    for (let i = 0; i < dots.length; i++) {
+      for (let j = i + 1; j < dots.length; j++) {
+        const a = dots[i], b = dots[j];
+        const dist = Math.hypot(a.x - b.x, a.y - b.y);
+        if (dist < 90) {
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.strokeStyle = `rgba(122, 162, 255, ${0.18 * (1 - dist / 90)})`;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  canvas.addEventListener('pointermove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    pointer.x = e.clientX - rect.left;
+    pointer.y = e.clientY - rect.top;
+  });
+  canvas.addEventListener('pointerleave', () => {
+    pointer.x = -999;
+    pointer.y = -999;
+  });
+
+  function reportHeight() {
+    parent.postMessage(
+      { type: 'demo-height', height: document.documentElement.scrollHeight },
+      '*',
+    );
+  }
+
+  new ResizeObserver(reportHeight).observe(document.body);
+  window.addEventListener('load', () => { resize(); frame(); reportHeight(); });
+</script>
+</body>
+</html>

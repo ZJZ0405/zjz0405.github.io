@@ -1,0 +1,40 @@
+---
+/**
+ * 嵌入 public/demos 下的自包含 HTML（AI 生成的完整页面）。
+ * 用 iframe 隔离样式与脚本，并支持子页面 postMessage 上报高度。
+ */
+interface Props {
+  src: string;
+  title: string;
+  height?: number;
+}
+
+const { src, title, height = 420 } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const url = `${base}/${src.replace(/^\//, '')}`;
+---
+
+<figure class="demo">
+  <iframe
+    data-demo
+    src={url}
+    title={title}
+    loading="lazy"
+    style={`height:${height}px`}
+  ></iframe>
+  <figcaption>
+    {title} · <a href={url} target="_blank" rel="noopener">在新标签页打开</a>
+  </figcaption>
+</figure>
+
+<script is:inline>
+  window.addEventListener('message', (event) => {
+    const data = event.data;
+    if (!data || data.type !== 'demo-height') return;
+    document.querySelectorAll('iframe[data-demo]').forEach((el) => {
+      if (el.contentWindow === event.source) {
+        el.style.height = `${data.height}px`;
+      }
+    });
+  });
+</script>

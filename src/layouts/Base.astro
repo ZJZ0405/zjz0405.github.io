@@ -1,0 +1,46 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = 'ZJZ0405 的技术博客：AI 基础设施、CUDA、系统性能与工程实践。',
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <slot name="head" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">ZJZ0405</a>
+      <nav>
+        <a href="/">文章</a>
+        <a href="/tags/">标签</a>
+        <a href="/rss.xml">RSS</a>
+        <a href="https://github.com/ZJZ0405">GitHub</a>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer>© {new Date().getFullYear()} ZJZ0405 · Built with Astro &amp; GitHub Pages</footer>
+  </body>
+</html>
