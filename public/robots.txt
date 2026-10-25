@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://zjz0405.github.io/sitemap-index.xml
