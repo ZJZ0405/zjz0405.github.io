@@ -16,3 +16,5 @@ draft: false
 - **调度与返回**：EngineCore 调度 prefill / decode，GPU Worker 前向并采样；非流式聚合成 200 JSON，流式逐块走 SSE，trace 通过 OTLP 异步导出。
 
 <iframe src="/demos/llm-engine/vllm/vllm-chat-request.html?embed=1" title="vLLM 聊天补全请求时序" loading="lazy" style="box-sizing:border-box;width:100%;aspect-ratio:920/902;min-height:420px;border:1px solid rgba(128,128,128,.25);border-radius:12px;background:transparent"></iframe>
+
+<p style="text-align:center;margin-top:-0.25rem"><a href="/demos/llm-engine/vllm/vllm-chat-request.html" target="_blank" rel="noopener">在新标签页打开原网页 ↗</a></p>

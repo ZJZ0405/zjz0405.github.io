@@ -16,3 +16,5 @@ draft: false
 - **收尾回收**：结束或中止走 `free_seq`，释放 blocks 和 state，`ref_count` 归零后才算真正回收；`log_step` 同样是可选的。
 
 <iframe src="/demos/llm-engine/deepinfer/deepinfer-scheduler-kv.html?embed=1" title="DeepInfer 单请求时序：调度、KV 分配与解码返回" loading="lazy" style="box-sizing:border-box;width:100%;aspect-ratio:1061/1173;min-height:460px;border:1px solid rgba(128,128,128,.25);border-radius:12px;background:transparent"></iframe>
+
+<p style="text-align:center;margin-top:-0.25rem"><a href="/demos/llm-engine/deepinfer/deepinfer-scheduler-kv.html" target="_blank" rel="noopener">在新标签页打开原网页 ↗</a></p>

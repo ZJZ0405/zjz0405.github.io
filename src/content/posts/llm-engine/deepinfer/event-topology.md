@@ -16,3 +16,5 @@ draft: false
 - **单线程调度**：`Scheduler::schedule` 是 C++ 单线程批调度，`execute_model_step` 按 TP / EP rank 执行，`sample` 做采样和 nextn 草稿，`post_process` 汇总 `RequestOutput` 并按请求排序回收。
 
 <iframe src="/demos/llm-engine/deepinfer/deepinfer-event-topology.html?embed=1" title="DeepInfer 事件流拓扑" loading="lazy" style="box-sizing:border-box;width:100%;aspect-ratio:1068/686;min-height:380px;border:1px solid rgba(128,128,128,.25);border-radius:12px;background:transparent"></iframe>
+
+<p style="text-align:center;margin-top:-0.25rem"><a href="/demos/llm-engine/deepinfer/deepinfer-event-topology.html" target="_blank" rel="noopener">在新标签页打开原网页 ↗</a></p>

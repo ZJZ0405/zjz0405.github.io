@@ -16,3 +16,5 @@ draft: false
 - **回传**：token 流回到网关，网关写响应和 history 条目；trace、事件和 metrics 走异步上报，不阻塞返回。
 
 <iframe src="/demos/llm-engine/sglang/sglang-request-engine.html?embed=1" title="SGLang 请求全链路" loading="lazy" style="box-sizing:border-box;width:100%;aspect-ratio:920/958;min-height:440px;border:1px solid rgba(128,128,128,.25);border-radius:12px;background:transparent"></iframe>
+
+<p style="text-align:center;margin-top:-0.25rem"><a href="/demos/llm-engine/sglang/sglang-request-engine.html" target="_blank" rel="noopener">在新标签页打开原网页 ↗</a></p>

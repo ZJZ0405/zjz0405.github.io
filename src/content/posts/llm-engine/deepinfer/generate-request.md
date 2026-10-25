@@ -16,3 +16,5 @@ DeepInfer 的离线路径比在线服务短一截：没有鉴权，没有前缀�
 - **返回与日志**：最终 `RequestOutput` 携带解码文本；`log_step` 走可选 daemon 日志线程，默认关闭。
 
 <iframe src="/demos/llm-engine/deepinfer/deepinfer-request.html?embed=1" title="DeepInfer 单请求时序：从 generate 到解码文本" loading="lazy" style="box-sizing:border-box;width:100%;aspect-ratio:920/818;min-height:420px;border:1px solid rgba(128,128,128,.25);border-radius:12px;background:transparent"></iframe>
+
+<p style="text-align:center;margin-top:-0.25rem"><a href="/demos/llm-engine/deepinfer/deepinfer-request.html" target="_blank" rel="noopener">在新标签页打开原网页 ↗</a></p>
