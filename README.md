@@ -65,6 +65,11 @@ draft: false
 
 HTML 更新时替换同名文件即可。iframe 加 `?embed=1` 隐藏页面外壳只留图，`?present=1` 进入演示模式。
 
+## Quantization 分类
+
+`src/content/posts/quantization/` 收低精度推理相关笔记，文章统一 `category: Quantization`。
+首篇 `intro.md` 是分类导言，`from-scratch.md` 是量化算法长文（仿射量化、校准、PTQ/QAT、GPTQ/AWQ/SmoothQuant、FP8/FP4），配图在 `public/images/quantization/`。后续按主题平铺或分子目录即可，侧栏分类计数会自动更新。
+
 ## 站点配置
 
 `src/config.ts` 里改：
