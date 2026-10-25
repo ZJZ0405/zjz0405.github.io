@@ -53,7 +53,9 @@ export const navBarConfig: NavBarConfig = {
 };
 
 export const profileConfig: ProfileConfig = {
-	avatar: "/avatar.svg", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
+	// GitHub 头像（avatars.githubusercontent.com/u/105736491）已下载到 public/avatar.jpg。
+	// 想让头像跟 GitHub 同步，可改成直链: "https://github.com/ZJZ0405.png?size=460"
+	avatar: "/avatar.jpg", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
 	name: "ZJZ0405",
 	bio: "记录 AI 基础设施、CUDA kernel 与系统性能的工程笔记。",
 	links: [
