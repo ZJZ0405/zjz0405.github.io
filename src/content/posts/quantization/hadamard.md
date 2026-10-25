@@ -409,6 +409,16 @@ $$
 
 这里演示的是**沿通道维右乘** $H$，也就是量化里对激活做的事，不是把整张矩阵做二维变换。二维版本 $H_T X H_d$ 同样满足平方为恒等（对 token 维和通道维分别用相应阶数的 $H$），但混合的是两个方向。
 
+### 3.7 3D 视角：数据一层层被混合
+
+动画 1 看的是“状态”；下面这个 3D 版本看的是“过程”。矩阵被摊成高度场，5 个蝶形阶段（$h=1,2,4,8,16$）逐层把通道混合。高度是真实数值（固定 $z$ 轴），颜色也按数值映射，所以 $X$ 的少数高脊和尖峰在 $XH$ 里被摊成低而密的场。再按相反阶段走一遍，因为每个阶段都是对合，整体仍是同一个 $H$，回到 $X$。
+
+<video src="/videos/hadamard-3d.mp4" poster="/images/quantization/hadamard-3d-poster.png" autoplay loop muted playsinline style="width:100%;border-radius:12px;display:block;background:#0f172a">
+  <img src="/images/quantization/hadamard-3d-poster.png" alt="3D Hadamard transform: the data, stage by stage">
+</video>
+
+*动画 2：3D 版把矩阵画成高度场，逐个阶段看 FWHT 的混合。3D 版换了一个更极端的 $32\times32$ 例子，便于看高度差；5 个阶段的矩阵是真实的 FWHT 中间结果，而不是首尾两帧的插值；曲面在格点间做了双线性平滑。*
+
 ## 4. 快速变换：d log d 是怎么来的
 
 ### 4.1 从递推到蝶形
