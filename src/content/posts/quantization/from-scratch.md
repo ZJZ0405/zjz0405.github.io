@@ -163,7 +163,7 @@ $$
 
 真实分布往往是重尾的。用 Student-t（自由度 3）模拟激活，比较不同裁剪阈值下的 4-bit MSE：
 
-![图 1：重尾分布下，min-max 阈值与 MSE 最优阈值的差别。](/images/quantization/clipping-tradeoff.png)
+<img src="/images/quantization/clipping-tradeoff.png" alt="图 1：重尾分布下，min-max 阈值与 MSE 最优阈值的差别。" class="theme-img" loading="lazy">
 
 *图 1：min-max 阈值 75.31 时 MSE 为 2.028；MSE 最优阈值 8.37 时只有 0.295，而且只丢掉了 0.37% 的样本。*
 
@@ -196,7 +196,7 @@ PTQ 不训练模型，只用一小批代表性数据跑一遍，统计激活范�
 | MSE search | 8.32 | 0.10% | 0.053 | 13.76 dB |
 | KL calibration | 4.09 | 0.27% | 0.103 | 10.85 dB |
 
-![图 2：重尾激活的分布，以及不同裁剪阈值下的校准 MSE。](/images/quantization/calibration.png)
+<img src="/images/quantization/calibration.png" alt="图 2：重尾激活的分布，以及不同裁剪阈值下的校准 MSE。" class="theme-img" loading="lazy">
 
 *图 2：min-max 被单个 outlier 拖到 21 附近；MSE 最优在 8.3 左右；KL 在这组数据上反而偏激进。*
 
@@ -230,7 +230,7 @@ PTQ 不训练模型，只用一小批代表性数据跑一遍，统计激活范�
 | W8A4 | 8 | 4 | 77.7% | -21.7 |
 | W4A4 | 4 | 4 | 66.0% | -33.3 |
 
-![图 3：静态 PTQ 下，权重和激活 bit 数对测试精度的影响。](/images/quantization/ptq-bits.png)
+<img src="/images/quantization/ptq-bits.png" alt="图 3：静态 PTQ 下，权重和激活 bit 数对测试精度的影响。" class="theme-img" loading="lazy">
 
 *图 3：在这个小 MLP 上，4-bit 权重是主要瓶颈；8-bit 激活几乎没有额外损失；两边都粗时误差会叠加。*
 
@@ -293,7 +293,7 @@ class RoundSTE(torch.autograd.Function):
 |---|---:|---:|---:|
 | test acc | 99.3% | 79.5% | 98.3% |
 
-![图 4：4-bit 权重的 QAT 恢复效果。](/images/quantization/qat-recovery.png)
+<img src="/images/quantization/qat-recovery.png" alt="图 4：4-bit 权重的 QAT 恢复效果。" class="theme-img" loading="lazy">
 
 *图 4：QAT 把 4-bit 权重的测试精度从 79.5% 拉回 98.3%，接近 FP32 的 99.3%。*
 
@@ -329,7 +329,7 @@ $$
 | AdaRound | 每个权重的取整方向 | 3.4% | 99.0% |
 | GPTQ | 未量化列的误差补偿 | 7.5% | 93.2% |
 
-![图 5：第 2 层 4-bit 量化后的输出相对误差。](/images/quantization/layer-reconstruction.png)
+<img src="/images/quantization/layer-reconstruction.png" alt="图 5：第 2 层 4-bit 量化后的输出相对误差。" class="theme-img" loading="lazy">
 
 *图 5：RTN 的每个权重都“离原值最近”，但整层输出误差不是最小；AdaRound 和 GPTQ 优化的是输出空间。*
 
@@ -418,7 +418,7 @@ $$
 
 $\alpha=0$ 时全部难度留给激活，$\alpha=1$ 时全部迁移到权重，$\alpha=0.5$ 时两边各承担一半。
 
-![图 6：SmoothQuant 的 alpha 搜索与 outlier 迁移。](/images/quantization/smoothquant.png)
+<img src="/images/quantization/smoothquant.png" alt="图 6：SmoothQuant 的 alpha 搜索与 outlier 迁移。" class="theme-img" loading="lazy">
 
 *图 6：合成层上 W8A8 相对误差从 6.53% 降到 1.80%，最佳 alpha=0.8；右图能看到通道 7 的尖峰被摊平。*
 
@@ -495,7 +495,7 @@ Hadamard 把最大激活从 35 降到 6 左右，kurtosis 从几十降到 3 附�
 - **E5M2 范围大但精度低**：5 位指数覆盖到 57344，2 位尾数意味着一个 binade 只有 4 个台阶；它更适合梯度，不太适合权重/激活。
 - **E2M1 只有 7 个非零正电平**：$0.5,1,1.5,2,3,4,6$。没有 block scale 时，FP4 对 LLM 基本不可用。
 
-![图 7：INT8、E4M3、E2M1 的可表示电平，以及同一组数上的相对误差。](/images/quantization/fp-grid.png)
+<img src="/images/quantization/fp-grid.png" alt="图 7：INT8、E4M3、E2M1 的可表示电平，以及同一组数上的相对误差。" class="theme-img" loading="lazy">
 
 *图 7：INT8 是等距网格，小值没有电平只能变成 0；E4M3 的相对误差几乎水平；E2M1 在 per-tensor 下大部分小值直接归零。*
 
@@ -539,7 +539,7 @@ NVFP4 用两级缩放：16 个元素共享一个 E4M3 block scale，再加一个
 
 在一个刻意构造的重尾权重上（每行尺度跨约 3 个数量级，另有 0.05% 的 40 倍 outlier），各格式的 weight SQNR：
 
-![图 8：同一个重尾权重张量上，不同格式与 scale 粒度的 SQNR。](/images/quantization/format-sqnr.png)
+<img src="/images/quantization/format-sqnr.png" alt="图 8：同一个重尾权重张量上，不同格式与 scale 粒度的 SQNR。" class="theme-img" loading="lazy">
 
 *图 8：INT8 per-tensor 只有 12.4 dB；FP8 E4M3 per-tensor 31.9 dB，block=128 34.5 dB；4-bit 一档里 NVFP4 21.3 dB、INT4 group=32 19.2 dB、MXFP4 17.5 dB。*
 
