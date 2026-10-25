@@ -54,6 +54,17 @@ draft: false
 
 样式和脚本被 iframe 隔离，不会污染主题。示例见 `public/demos/particles.html`。
 
+## LLM Engine 图集
+
+`src/content/posts/llm-engine/` 按引擎归档 Archify 生成的交互图，文章统一 `category: LLM Engine`，
+正文用 iframe 引用 `public/demos/llm-engine/<engine>/` 下的自包含 HTML：
+
+- vLLM：`vllm/chat-completion-request.md`
+- SGLang：`sglang/gateway-request.md`、`sglang/engine-request.md`
+- DeepInfer：`deepinfer/generate-request.md`、`deepinfer/scheduler-kv.md`、`deepinfer/event-topology.md`
+
+HTML 更新时替换同名文件即可。iframe 加 `?embed=1` 隐藏页面外壳只留图，`?present=1` 进入演示模式。
+
 ## 站点配置
 
 `src/config.ts` 里改：
