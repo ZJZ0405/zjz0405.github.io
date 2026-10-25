@@ -1,0 +1,58 @@
+name: Sync awesome-skills doc
+
+on:
+  schedule:
+    - cron: "17 1 * * *" # 每天 01:17 UTC = 北京时间 09:17
+  workflow_dispatch:
+  repository_dispatch:
+    types: [awesome-skills-updated]
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: sync-awesome-skills
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Regenerate the usage doc
+        run: node scripts/sync-awesome-skills.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit and push if changed
+        id: commit
+        run: |
+          if [ -z "$(git status --porcelain -- src/content/posts/tools/awesome-skills.md)" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "说明已是最新，无需提交。"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/content/posts/tools/awesome-skills.md
+          git commit -m "docs(tools): 同步 awesome-skills 技能目录"
+          git push origin HEAD:main
+
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      # 用 GITHUB_TOKEN 推送的 commit 不会触发 push 事件，
+      # 所以显式叫一次 Pages 部署，否则仓库更新了但站点不会重建。
+      - name: Trigger Pages deploy
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run deploy.yml --ref main

@@ -22,6 +22,8 @@ pnpm preview   # 预览构建结果
 
 推送到 `main` 触发 `.github/workflows/deploy.yml`，用 `pnpm build` 构建后发布。
 
+`.github/workflows/sync-awesome-skills.yml` 每天同步一次 Tools 说明，有变化时提交并显式触发一次部署。
+
 Pages 的 Source 已是 `GitHub Actions`，不需要改。
 
 ## 写文章
@@ -69,6 +71,37 @@ HTML 更新时替换同名文件即可。iframe 加 `?embed=1` 隐藏页面外�
 
 `src/content/posts/quantization/` 收低精度推理相关笔记，文章统一 `category: Quantization`。
 首篇 `intro.md` 是分类导言，`from-scratch.md` 是量化算法长文（仿射量化、校准、PTQ/QAT、GPTQ/AWQ/SmoothQuant、FP8/FP4），配图在 `public/images/quantization/`。图表准备了明暗两套：亮色用 `<name>.png`，暗色用 `<name>-dark.png`（同一 notebook、同一 seed 重跑，只换 matplotlib 配色，两套尺寸一致）；文章里的 `<img>` 同时写 `data-light-src` 与 `data-dark-src`，`Layout.astro` 会在主题切换时更新 `src`，灯箱打开的是当前主题那张。后续按主题平铺或分子目录即可，侧栏分类计数会自动更新。
+
+## Tools 分类与 awesome-skills 说明
+
+`src/content/posts/tools/awesome-skills.md` 是 [awesome-skills](https://github.com/ZJZ0405/awesome-skills) 的安装与使用说明，`category: Tools`。
+
+文章里只有标记块内的版本号、技能表、工具别名数由脚本生成，正文手写：
+
+```md
+<!-- awesome-skills:catalog:start -->
+...
+<!-- awesome-skills:catalog:end -->
+```
+
+脚本 `scripts/sync-awesome-skills.mjs`（零依赖，Node 18+）拉取上游 `VERSION`、`catalog.json`、`sources.json`、`lib/agents.tsv`，再通过 GitHub API（失败时回退到 commits Atom feed）取最近提交，重写标记块并更新 frontmatter 的 `updated`：
+
+```bash
+pnpm sync:skills                                  # 手动同步
+pnpm sync:skills:check                            # 只检查，过期时退出码 1
+node scripts/sync-awesome-skills.mjs --dry-run    # 只打印，不写文件
+```
+
+本地需要代理时，脚本会走 Node 内置 fetch：Node 24 用 `NODE_USE_ENV_PROXY=1` 加 `HTTPS_PROXY`，老版本 Node 需要自行确认 fetch 的代理行为。GitHub Actions 里不需要代理。
+
+`.github/workflows/sync-awesome-skills.yml` 每天北京时间 09:17 跑一次，只有上游变化才提交；提交后用 `gh workflow run deploy.yml` 显式触发部署。原因是 `GITHUB_TOKEN` 推送的 commit 不会触发 `push` 事件，不补这一步仓库更新了但网站不会重建。也可以在 awesome-skills 仓库里发 `repository_dispatch` 立即触发：
+
+```bash
+gh api repos/ZJZ0405/zjz0405.github.io/dispatches \
+  -f event_type=awesome-skills-updated
+```
+
+设计上不在 Astro 构建期访问 GitHub：静态构建要保持离线、可复现，raw / API 在国内也不稳定。同步失败只会让这个 workflow 报错，站点继续发布已有内容。若仓库开了分支保护，需要把 Actions bot 加进允许直接推送的名单，或把 workflow 改成 PR 流程。
 
 ## 站点配置
 
