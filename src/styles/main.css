@@ -116,16 +116,6 @@
     @apply cursor-zoom-in
 }
 
-/* 黑白底的图表在暗色主题下反色；mix-blend-mode 让白底反色后的黑色融进页面背景。 */
-.custom-md img.theme-img {
-    transition: filter 0.3s ease;
-}
-
-html.dark .custom-md img.theme-img {
-    filter: invert(1) hue-rotate(180deg) saturate(1.05);
-    mix-blend-mode: screen;
-}
-
 ::selection {
     background-color: var(--selection-bg)
 }

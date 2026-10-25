@@ -68,7 +68,7 @@ HTML 更新时替换同名文件即可。iframe 加 `?embed=1` 隐藏页面外�
 ## Quantization 分类
 
 `src/content/posts/quantization/` 收低精度推理相关笔记，文章统一 `category: Quantization`。
-首篇 `intro.md` 是分类导言，`from-scratch.md` 是量化算法长文（仿射量化、校准、PTQ/QAT、GPTQ/AWQ/SmoothQuant、FP8/FP4），配图在 `public/images/quantization/`。图表 `<img>` 加 `class="theme-img"` 后，暗色主题会自动反色并融入页面背景（规则在 `src/styles/main.css`）；照片类图片不要加这个 class。后续按主题平铺或分子目录即可，侧栏分类计数会自动更新。
+首篇 `intro.md` 是分类导言，`from-scratch.md` 是量化算法长文（仿射量化、校准、PTQ/QAT、GPTQ/AWQ/SmoothQuant、FP8/FP4），配图在 `public/images/quantization/`。图表准备了明暗两套：亮色用 `<name>.png`，暗色用 `<name>-dark.png`（同一 notebook、同一 seed 重跑，只换 matplotlib 配色，两套尺寸一致）；文章里的 `<img>` 同时写 `data-light-src` 与 `data-dark-src`，`Layout.astro` 会在主题切换时更新 `src`，灯箱打开的是当前主题那张。后续按主题平铺或分子目录即可，侧栏分类计数会自动更新。
 
 ## 站点配置
 

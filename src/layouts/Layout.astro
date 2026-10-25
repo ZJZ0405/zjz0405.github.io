@@ -528,12 +528,14 @@ function createPhotoSwipe() {
 
 	lightbox.addFilter("domItemData", (itemData, element) => {
 		if (element instanceof HTMLImageElement) {
-			itemData.src = element.src
+			// 主题感知图片会按当前明暗主题切换 src；灯箱取当前实际渲染的那张。
+			const src = element.currentSrc || element.src
+			itemData.src = src
 
 			itemData.w = Number(element.naturalWidth || window.innerWidth)
 			itemData.h = Number(element.naturalHeight || window.innerHeight)
 
-			itemData.msrc = element.src
+			itemData.msrc = src
 		}
 
 		return itemData
@@ -564,4 +566,42 @@ if (window.swup) {
 } else {
 	document.addEventListener("swup:enable", setup)
 }
+</script>
+
+<script is:inline>
+(() => {
+	const apply = () => {
+		const dark = document.documentElement.classList.contains("dark");
+		for (const img of document.querySelectorAll("img[data-dark-src]")) {
+			const next = dark ? img.dataset.darkSrc : img.dataset.lightSrc;
+			if (next && img.getAttribute("src") !== next) {
+				img.setAttribute("src", next);
+			}
+		}
+	};
+
+	let scheduled = false;
+	const schedule = () => {
+		if (scheduled) return;
+		scheduled = true;
+		requestAnimationFrame(() => {
+			scheduled = false;
+			apply();
+		});
+	};
+
+	apply();
+	new MutationObserver(schedule).observe(document.documentElement, {
+		attributes: true,
+		attributeFilter: ["class"],
+	});
+	new MutationObserver(schedule).observe(document.body, {
+		childList: true,
+		subtree: true,
+	});
+
+	const connectSwup = () => window.swup?.hooks.on("page:view", schedule);
+	if (window.swup) connectSwup();
+	else document.addEventListener("swup:enable", connectSwup);
+})();
 </script>
