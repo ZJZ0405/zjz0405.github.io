@@ -16,5 +16,3 @@ draft: false
 - **生成与落库**：通过 gRPC `generate` 拿到 token 流，网关写响应和 history 条目；`store=false` 时跳过落库，落库失败也只 warn，不挡响应。trace 和事件批次异步导出，不占响应路径。
 
 <iframe src="/demos/llm-engine/sglang/sglang-request-lifecycle.html?embed=1" title="SGLang 模型网关 /v1/responses 请求时序" loading="lazy" style="box-sizing:border-box;width:100%;aspect-ratio:920/920;min-height:420px;border:1px solid rgba(128,128,128,.25);border-radius:12px;background:transparent"></iframe>
-
-<p style="text-align:center;margin-top:-0.25rem"><a href="/demos/llm-engine/sglang/sglang-request-lifecycle.html" target="_blank" rel="noopener">在新标签页打开交互图 ↗</a></p>
