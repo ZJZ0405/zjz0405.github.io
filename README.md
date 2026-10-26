@@ -72,6 +72,12 @@ HTML 更新时替换同名文件即可。iframe 加 `?embed=1` 隐藏页面外�
 `src/content/posts/quantization/` 收低精度推理相关笔记，文章统一 `category: Quantization`。
 首篇 `intro.md` 是分类导言，`from-scratch.md` 是量化算法长文（仿射量化、校准、PTQ/QAT、GPTQ/AWQ/SmoothQuant、FP8/FP4），`hadamard.md` 讲 Hadamard 与快速变换，配图在 `public/images/quantization/`；`papers.md` 是按主题整理的论文汇总（70 篇左右，附 arXiv / 代码链接、阅读路线和选型建议）。图表准备了明暗两套：亮色用 `<name>.png`，暗色用 `<name>-dark.png`（同一 notebook、同一 seed 重跑，只换 matplotlib 配色，两套尺寸一致；均为 2x 分辨率，约 1200–2000px 宽）；文章里的 `<img>` 同时写 `data-light-src` 与 `data-dark-src`，`Layout.astro` 会在主题切换时更新 `src`，灯箱打开的是当前主题那张。后续按主题平铺或分子目录即可，侧栏分类计数会自动更新。
 
+## Kernel 分类
+
+`src/content/posts/kernel/` 收 GPU 算子相关笔记，文章统一 `category: Kernel`。首篇 `intro.md` 是分类导言，写明关注范围（执行模型、内存层级、GEMM / Attention、低精度融合、工具链、性能分析）与写作约定；后续按主题平铺或分子目录即可，侧栏分类计数会自动更新。
+
+分工上与 Quantization、LLM Engine 不重叠：量化分类讲算法与精度，这里讲量化后 kernel 的落地；引擎分类讲调度与请求链路，这里讲单个算子内部实现。
+
 ## Tools 分类与 awesome-skills 说明
 
 `src/content/posts/tools/awesome-skills.md` 是 [awesome-skills](https://github.com/ZJZ0405/awesome-skills) 的安装与使用说明，`category: Tools`。
