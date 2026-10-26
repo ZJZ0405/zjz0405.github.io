@@ -25,3 +25,5 @@ draft: false
 ## 怎么读
 
 分类页按发布时间倒序排列，侧栏的 Quantization 入口会随文章增加自动更新。第一篇长文已经从一份可运行的 notebook 整理出来：[量化从零开始：从仿射量化到 FP4 的工程笔记](/posts/quantization/from-scratch/)，建议从那里开始，再看具体模型上的落地案例。
+
+想先看论文的话，[量化论文汇总：从 INT8 到 FP4 的阅读地图](/posts/quantization/papers/) 按主题整理了 70 篇左右主线工作，包括基础 PTQ/QAT、outlier、GPTQ/AWQ、旋转 W4A4、KV cache、FP8/FP4 和系统 kernel，并给出三条阅读路线与选型建议。
