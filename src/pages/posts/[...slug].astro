@@ -52,7 +52,7 @@ const jsonLd = {
         <div id="post-container" class:list={["card-base z-10 px-6 md:px-9 pt-6 pb-4 relative w-full ",
             {}
         ]}>
-            <!-- word count, reading time and the bilingual switch -->
+            <!-- word count and reading time -->
             <div class="flex flex-row flex-wrap items-center text-black/30 dark:text-white/30 gap-x-5 gap-y-2 mb-3 transition onload-animation">
                 <div class="flex flex-row flex-wrap gap-5">
                     <div class="flex flex-row items-center">
@@ -70,7 +70,6 @@ const jsonLd = {
                         </div>
                     </div>
                 </div>
-                {entry.data.bilingual && <PostLangSwitch class="ml-auto" />}
             </div>
 
             <!-- title -->
@@ -96,6 +95,22 @@ const jsonLd = {
                         tags={entry.data.tags}
                         category={entry.data.category}
                 ></PostMetadata>
+
+                {entry.data.bilingual && (
+                    <div class="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-[var(--radius-large)] border border-[var(--line-divider)] bg-[var(--btn-plain-bg-hover)] px-3.5 py-3">
+                        <div class="flex min-w-0 items-center gap-2.5">
+                            <span class="text-[1.35rem] leading-none text-[var(--primary)]">
+                                <Icon name="material-symbols:translate-rounded"></Icon>
+                            </span>
+                            <div class="min-w-0">
+                                <div class="text-sm font-bold text-black/80 dark:text-white/80">语言 / Language</div>
+                                <div class="text-xs text-black/50 dark:text-white/50">中英对照 · 中文 · English</div>
+                            </div>
+                        </div>
+                        <PostLangSwitch />
+                    </div>
+                )}
+
                 {!entry.data.image && <div class="border-[var(--line-divider)] border-dashed border-b-[1px] mb-5"></div>}
             </div>
 

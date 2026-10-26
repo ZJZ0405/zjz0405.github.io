@@ -1,6 +1,4 @@
 ---
-import { Icon } from "astro-icon/components";
-
 interface Props {
 	class?: string;
 }
@@ -13,12 +11,9 @@ const className = Astro.props.class;
 	role="group"
 	aria-label="语言显示 / Language"
 >
-	<span class="post-lang-switch-icon" aria-hidden="true">
-		<Icon name="material-symbols:translate-rounded" />
-	</span>
-	<button type="button" data-lang-mode="both" aria-pressed="true" title="中英对照 / Bilingual">中英</button>
+	<button type="button" data-lang-mode="both" aria-pressed="true" title="中英对照 / Bilingual">中英对照</button>
 	<button type="button" data-lang-mode="zh" aria-pressed="false" title="仅显示中文 / Chinese only">中文</button>
-	<button type="button" data-lang-mode="en" aria-pressed="false" title="Show English only">EN</button>
+	<button type="button" data-lang-mode="en" aria-pressed="false" title="Show English only">English</button>
 </post-lang-switch>
 
 <noscript>
