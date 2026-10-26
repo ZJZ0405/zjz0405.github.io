@@ -127,7 +127,7 @@ QuaRot 的关键贡献不是“旋转能压 outlier”这个观察，而是证�
 
 2026 年的两条新线值得跟：PeRQ 在 block rotation 之前做 permutation，按 block 均衡 $\ell_1$ 质量，并把 permutation 折进权重；DuQuant++ 把旋转块对齐到 MXFP4 的 32 元素组，利用每组独立 scale 的特点，只做一次 outlier-aware rotation。
 
-除了改分布，还有一条正交的线是改调度。SliderQuant 先做逐层敏感度分析：浅层和深层比中间层更容易被量化破坏，其中最敏感的是第一层和最后一层。于是它把固定滑窗换成随深度变形的滑窗——浅层从 1 层开始逐步扩大、始终锚定第一层，中间层保持 $\{s=2,i=1\}$ 的固定重叠，深层从整段开始逐步收缩、始终锚定最后一层；窗口内再按 $\gamma=1/2$ 分两阶段量化。它不引入任何 online 变换，W4A4 的 Llama2-7B 就把 WikiText2 从 CBQ 的 12.73 压到 8.34；再叠上旋转（SliderQuant+）还能低一点。代价在量化阶段：W4A4 的 Llama2-7B 默认 20 个 epoch、约 6 个 A6000 小时；推理时学到的 scale 和 LoRA 都折进权重，没有额外开销。
+除了改分布，还有一条正交的线是改调度。SliderQuant 先做逐层敏感度分析：浅层和深层比中间层更容易被量化破坏，其中最敏感的是第一层和最后一层。于是它把固定滑窗换成随深度变形的滑窗——浅层从 1 层开始逐步扩大、始终锚定第一层，中间层保持 $\{s=2,i=1\}$ 的固定重叠，深层从整段开始逐步收缩、始终锚定最后一层；窗口内再按 $\gamma=1/2$ 分两阶段量化。它不引入任何 online 变换，W4A4 的 Llama2-7B 就把 WikiText2 从 CBQ 的 12.73 压到 8.34；再叠上旋转（SliderQuant+）还能低一点。代价在量化阶段：W4A4 的 Llama2-7B 默认 20 个 epoch、约 6 个 A6000 小时；推理时学到的 scale 和 LoRA 都折进权重，没有额外开销。逐段中英对照、全部实验表与批判性笔记见 [SliderQuant 中英对照精读](/posts/quantization/sliderquant/)。
 
 旋转为什么有效、Hadamard 的峰值下界和 FWHT 的推导，见 [Hadamard 矩阵与快速变换](/posts/quantization/hadamard/)。
 
@@ -140,7 +140,7 @@ QuaRot 的关键贡献不是“旋转能压 outlier”这个观察，而是证�
 | [OstQuant: Refining Large Language Model Quantization with Orthogonal and Scaling Transformations for Better Distribution Fitting](https://arxiv.org/abs/2501.13987) · [code](https://github.com/BrotherHappy/OSTQuant) | 2025 | 提出 QSUR 度量，学习正交 + scaling 变换，让分布更贴合量化空间 | 用“空间利用率”解释变换的好坏 |
 | [Pushing the Limits of Block Rotations in Post-Training Quantization](https://arxiv.org/abs/2601.22347) | 2026 | 分析 block Hadamard 的 outlier 抑制极限；PeRQ 先 permutation 再旋转，block=16 恢复 90% full-vector 效果 | block rotation 的理论补课 |
 | [DuQuant++: Fine-grained Rotation Enhances Microscaling FP4 Quantization](https://arxiv.org/abs/2604.17789) · [code](https://github.com/Hsu1023/DuQuant-v2) | 2026 | 旋转块对齐 MXFP4 的 32 元素组，单次 outlier-aware rotation，online 开销减半 | MXFP4 + 旋转的最新组合 |
-| [SliderQuant: Accurate Post-Training Quantization for LLMs](https://arxiv.org/abs/2603.25284) · [code](https://github.com/deep-optimization/SliderQuant) | 2026 ICLR | 把固定滑窗改成随深度变形的滑窗（浅层扩张、中层固定、深层收缩），窗口内分阶段量化；W4A16/W2A16/W4A4 都测 | 不改分布、只改量化调度，和旋转正交 |
+| [SliderQuant: Accurate Post-Training Quantization for LLMs](https://arxiv.org/abs/2603.25284) · [code](https://github.com/deep-optimization/SliderQuant) · [精读](/posts/quantization/sliderquant/) | 2026 ICLR | 把固定滑窗改成随深度变形的滑窗（浅层扩张、中层固定、深层收缩），窗口内分阶段量化；W4A16/W2A16/W4A4 都测 | 不改分布、只改量化调度，和旋转正交 |
 
 **工程注意**：
 
