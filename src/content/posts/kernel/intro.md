@@ -26,4 +26,10 @@ draft: false
 
 ## 怎么读
 
-分类页按发布时间倒序排列，侧栏的 Kernel 入口会随文章增加自动更新。目前只有这篇导言，后续每篇独立成文，按主题平铺或分子目录都可以。
+分类页按发布时间倒序排列，侧栏的 Kernel 入口会随文章增加自动更新。三篇手册建议按下面的顺序读，它们覆盖的是同一件事的不同抽象层：
+
+- [CUDA 手册：执行模型、内存层级与 Kernel 优化](/posts/kernel/cuda/)：线程、shared memory、nvcc 产物和检查清单，另外两篇的地基。
+- [Triton 手册：块级编程、编译链路与 Autotune](/posts/kernel/triton/)：用 Python 写 tile，理解 layout 推断和流水线。
+- [TileLang 手册：Tile 级 DSL 与 Tensor Core 算子](/posts/kernel/tilelang/)：显式 tile 的 GEMM/Attention 写法，以及多后端编译。
+
+三篇都是手册性质，会随着实践继续补例子和踩坑记录。
