@@ -26,6 +26,12 @@ pnpm preview   # 预览构建结果
 
 Pages 的 Source 已是 `GitHub Actions`，不需要改。
 
+## 大文件与 Git LFS
+
+论文图表等大体积二进制资源用 Git LFS 管理，当前规则是 `public/images/quantization/sliderquant/**/*.png`，见 `.gitattributes`。新增同类资源前先 `git lfs track "路径/**/*.png"` 再 `git add`，避免把 10MB 级 PNG 直接塞进普通 Git 对象。
+
+`.github/workflows/deploy.yml` 的 `actions/checkout` 已开启 `lfs: true`，构建时会拉取真实图片而不是 LFS 指针。已有历史里的旧图片没有做 `git lfs migrate`（那会重写已推送历史并需要 force-push），后续大资源按上面的方式逐步迁移即可。
+
 ## 写文章
 
 在 `src/content/posts/` 新建 `.md`：
@@ -72,9 +78,17 @@ HTML 更新时替换同名文件即可。iframe 加 `?embed=1` 隐藏页面外�
 `src/content/posts/quantization/` 收低精度推理相关笔记，文章统一 `category: Quantization`。
 首篇 `intro.md` 是分类导言，`from-scratch.md` 是量化算法长文（仿射量化、校准、PTQ/QAT、GPTQ/AWQ/SmoothQuant、FP8/FP4），`hadamard.md` 讲 Hadamard 与快速变换，配图在 `public/images/quantization/`；`papers.md` 是按主题整理的论文汇总（70 篇左右，附 arXiv / 代码链接、阅读路线和选型建议）。图表准备了明暗两套：亮色用 `<name>.png`，暗色用 `<name>-dark.png`（同一 notebook、同一 seed 重跑，只换 matplotlib 配色，两套尺寸一致；均为 2x 分辨率，约 1200–2000px 宽）；文章里的 `<img>` 同时写 `data-light-src` 与 `data-dark-src`，`Layout.astro` 会在主题切换时更新 `src`，灯箱打开的是当前主题那张。后续按主题平铺或分子目录即可，侧栏分类计数会自动更新。
 
+`sliderquant.md` 是 ICLR 2026 SliderQuant 的 source-grounded 中英对照精读，图表放在 `public/images/quantization/sliderquant/`。双语正文用 `:::en` / `:::zh` 容器指令包裹对应语言（由 `src/plugins/rehype-component-language.mjs` 渲染成 `.lang-block`），frontmatter 设 `bilingual: true` 后文章页会出现 **中英 / 中文 / EN** 三态开关。`PostLangSwitch.astro` 把选择存进 localStorage 并同步 TOC，`Layout.astro` 在首屏前写入 `data-post-lang` 避免语言闪烁；EN 模式下只显示 `:::en` 块，TOC 里指向中文专属章节的条目会自动隐藏并重新编号。后续再做双语长文可以直接复用这套标记。
+
 ## Kernel 分类
 
-`src/content/posts/kernel/` 收 GPU 算子相关笔记，文章统一 `category: Kernel`。首篇 `intro.md` 是分类导言，写明关注范围（执行模型、内存层级、GEMM / Attention、低精度融合、工具链、性能分析）与写作约定；后续按主题平铺或分子目录即可，侧栏分类计数会自动更新。
+`src/content/posts/kernel/` 收 GPU 算子相关笔记，文章统一 `category: Kernel`。`intro.md` 是分类导言，写明关注范围（执行模型、内存层级、GEMM / Attention、低精度融合、工具链、性能分析）与写作约定，并按 CUDA → Triton → TileLang 的顺序串起三篇手册：
+
+- `cuda.md`：执行模型、内存层级、vector add 与分块 GEMM、nvcc / Nsight / compute-sanitizer、优化清单。
+- `triton.md`：program instance 模型、softmax / matmul、TTIR→TTGIR→PTX、autotune、调试与 Gluon。
+- `tilelang.md`：`T.Kernel` / `T.copy` / `T.gemm` / `T.Pipelined`、GEMM 实例、autotune、IR trace 与多后端。
+
+后续按主题平铺或分子目录即可，侧栏分类计数会自动更新。
 
 分工上与 Quantization、LLM Engine 不重叠：量化分类讲算法与精度，这里讲量化后 kernel 的落地；引擎分类讲调度与请求链路，这里讲单个算子内部实现。
 
