@@ -134,7 +134,7 @@ QuaRot 的关键贡献不是“旋转能压 outlier”这个观察，而是证�
 | 论文 | 年份/会议 | 做了什么 | 读它的理由 |
 |---|---|---|---|
 | [QuaRot: Outlier-Free 4-Bit Inference in Rotated LLMs](https://arxiv.org/abs/2404.00456) · [code](https://github.com/spcl/QuaRot) | 2024 NeurIPS | 用计算不变性把旋转吸进权重/LayerNorm，权重、激活、KV 全 4-bit | W4A4 的里程碑，必读 |
-| [SpinQuant: LLM Quantization with Learned Rotations](https://arxiv.org/abs/2405.16406) · [code](https://github.com/facebookresearch/SpinQuant) | 2025 ICLR | 参数化旋转并用 Cayley 优化学习；比较不同随机旋转的方差 | 说明“转哪里”比“转不转”更重要 |
+| [SpinQuant: LLM Quantization with Learned Rotations](https://arxiv.org/abs/2405.16406) · [code](https://github.com/facebookresearch/SpinQuant) · [精读](/posts/quantization/spinquant/) | 2025 ICLR | 参数化旋转并用 Cayley 优化学习；比较不同随机旋转的方差 | 说明“转哪里”比“转不转”更重要 |
 | [DuQuant: Distributing Outliers via Dual Transformation Makes Stronger Quantized LLMs](https://arxiv.org/abs/2406.01721) · [code](https://github.com/Hsu1023/DuQuant) | 2024 NeurIPS | block rotation + zigzag permutation + 二次旋转，专门处理 massive outlier | W4A4 下 outlier 更强的解法 |
 | [FlatQuant: Flatness Matters for LLM Quantization](https://arxiv.org/abs/2410.09426) · [code](https://github.com/ruikangliu/FlatQuant) | 2025 ICML | 逐层学习仿射变换，Kronecker 分解 + fused kernel；W4A4 LLaMA-3-70B 掉点 <1% | 从“旋转”走到“学习变换” |
 | [OstQuant: Refining Large Language Model Quantization with Orthogonal and Scaling Transformations for Better Distribution Fitting](https://arxiv.org/abs/2501.13987) · [code](https://github.com/BrotherHappy/OSTQuant) | 2025 | 提出 QSUR 度量，学习正交 + scaling 变换，让分布更贴合量化空间 | 用“空间利用率”解释变换的好坏 |

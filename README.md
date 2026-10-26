@@ -93,7 +93,7 @@ HTML 更新时替换同名文件即可。iframe 加 `?embed=1` 隐藏页面外�
 `src/content/posts/quantization/` 收低精度推理相关笔记，文章统一 `category: Quantization`。
 首篇 `intro.md` 是分类导言，`from-scratch.md` 是量化算法长文（仿射量化、校准、PTQ/QAT、GPTQ/AWQ/SmoothQuant、FP8/FP4），`hadamard.md` 讲 Hadamard 与快速变换，配图在 `public/images/quantization/`；`papers.md` 是按主题整理的论文汇总（70 篇左右，附 arXiv / 代码链接、阅读路线和选型建议）。图表准备了明暗两套：亮色用 `<name>.png`，暗色用 `<name>-dark.png`（同一 notebook、同一 seed 重跑，只换 matplotlib 配色，两套尺寸一致；均为 2x 分辨率，约 1200–2000px 宽）；文章里的 `<img>` 同时写 `data-light-src` 与 `data-dark-src`，`Layout.astro` 会在主题切换时更新 `src`，灯箱打开的是当前主题那张。后续按主题平铺或分子目录即可，侧栏分类计数会自动更新。
 
-`sliderquant.md` 是 ICLR 2026 SliderQuant 的 source-grounded 中英对照精读，图表放在 `public/images/quantization/sliderquant/`。双语正文用 `:::en` / `:::zh` 容器指令包裹对应语言（由 `src/plugins/rehype-component-language.mjs` 渲染成 `.lang-block`），frontmatter 设 `bilingual: true` 后，文章标题下方会出现带「语言 / Language」标签的三态开关 **中英对照 / 中文 / English**。`PostLangSwitch.astro` 把选择存进 localStorage 并同步 TOC，`Layout.astro` 在首屏前写入 `data-post-lang` 避免语言闪烁；EN 模式下只显示 `:::en` 块，TOC 里指向中文专属章节的条目会自动隐藏并重新编号。后续再做双语长文可以直接复用这套标记。
+`sliderquant.md` 与 `spinquant.md` 分别是 ICLR 2026 SliderQuant、ICLR 2025 SpinQuant 的 source-grounded 中英对照精读，图表放在 `public/images/quantization/{sliderquant,spinquant}/`。双语正文用 `:::en` / `:::zh` 容器指令包裹对应语言（由 `src/plugins/rehype-component-language.mjs` 渲染成 `.lang-block`），frontmatter 设 `bilingual: true` 后，文章标题下方会出现带「语言 / Language」标签的三态开关 **中英对照 / 中文 / English**。`PostLangSwitch.astro` 把选择存进 localStorage 并同步 TOC，`Layout.astro` 在首屏前写入 `data-post-lang` 避免语言闪烁；EN 模式下只显示 `:::en` 块，TOC 里指向中文专属章节的条目会自动隐藏并重新编号。SpinQuant 那篇进一步把元数据、四段读前预备（N001–N004）、7 处补充推导（D1–D7）、式号/术语索引与阅读提示整段包进 `:::zh`，可以作为“英文只留论文正文、中文额外加料”的模板；后续再做双语长文可以直接复用这套标记。
 
 ## Kernel 分类
 

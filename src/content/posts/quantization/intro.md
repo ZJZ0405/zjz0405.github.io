@@ -28,4 +28,4 @@ draft: false
 
 想先看论文的话，[量化论文汇总：从 INT8 到 FP4 的阅读地图](/posts/quantization/papers/) 按主题整理了 70 篇左右主线工作，包括基础 PTQ/QAT、outlier、GPTQ/AWQ、旋转 W4A4、KV cache、FP8/FP4 和系统 kernel，并给出三条阅读路线与选型建议。
 
-如果准备精读某一篇，[SliderQuant 中英对照精读](/posts/quantization/sliderquant/) 是一个可参考的模板：逐块给出原文页码、英文原文与中文译文，图表紧裁切内嵌，页面右上角可以在 **中英对照 / 中文 / English** 之间切换。
+如果准备精读某一篇，两篇中英对照精读可以当模板：[SliderQuant](/posts/quantization/sliderquant/) 与 [SpinQuant](/posts/quantization/spinquant/)。它们逐块给出原文页码、英文原文与中文译文，图表紧裁切内嵌，页面头部可以在 **中英对照 / 中文 / English** 之间切换；SpinQuant 那篇还带了 RMSNorm / 残差流 / RoPE / Hadamard 四段读前预备和 7 处补充推导。
