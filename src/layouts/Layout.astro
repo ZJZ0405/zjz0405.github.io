@@ -137,6 +137,20 @@ const bannerOffset =
 			offset = offset - offset % 4;
 			document.documentElement.style.setProperty('--banner-height-extend', `${offset}px`);
 		</script>
+
+		<!-- Apply the bilingual reading mode before paint to avoid a flash of both languages -->
+		<script is:inline>
+			(() => {
+				try {
+					const mode = localStorage.getItem('post-lang-mode');
+					document.documentElement.dataset.postLang =
+						mode === 'zh' || mode === 'en' || mode === 'both' ? mode : 'both';
+				} catch {
+					document.documentElement.dataset.postLang = 'both';
+				}
+			})();
+		</script>
+
 		<style define:vars={{
 			configHue,
 			'page-width': `${PAGE_WIDTH}rem`,

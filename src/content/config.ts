@@ -11,6 +11,8 @@ const postsCollection = defineCollection({
 		tags: z.array(z.string()).optional().default([]),
 		category: z.string().optional().nullable().default(""),
 		lang: z.string().optional().default(""),
+		// 双语文章：渲染语言切换按钮，正文用 :::en / :::zh 包裹对应语言
+		bilingual: z.boolean().optional().default(false),
 
 		/* For internal use */
 		prevTitle: z.string().default(""),

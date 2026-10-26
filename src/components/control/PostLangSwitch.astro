@@ -1,0 +1,160 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+	class?: string;
+}
+
+const className = Astro.props.class;
+---
+
+<post-lang-switch
+	class:list={["post-lang-switch", className]}
+	role="group"
+	aria-label="语言显示 / Language"
+>
+	<span class="post-lang-switch-icon" aria-hidden="true">
+		<Icon name="material-symbols:translate-rounded" />
+	</span>
+	<button type="button" data-lang-mode="both" aria-pressed="true" title="中英对照 / Bilingual">中英</button>
+	<button type="button" data-lang-mode="zh" aria-pressed="false" title="仅显示中文 / Chinese only">中文</button>
+	<button type="button" data-lang-mode="en" aria-pressed="false" title="Show English only">EN</button>
+</post-lang-switch>
+
+<noscript>
+	<style>
+		post-lang-switch {
+			display: none !important;
+		}
+	</style>
+</noscript>
+
+<script>
+	const STORAGE_KEY = "post-lang-mode";
+	const MODES = ["both", "zh", "en"] as const;
+
+	type Mode = (typeof MODES)[number];
+
+	function isMode(value: string | null | undefined): value is Mode {
+		return value != null && (MODES as readonly string[]).includes(value);
+	}
+
+	function getMode(): Mode {
+		try {
+			const stored = localStorage.getItem(STORAGE_KEY);
+			if (isMode(stored)) return stored;
+		} catch {
+			// localStorage can be unavailable in strict privacy modes
+		}
+		return "both";
+	}
+
+	function syncToc() {
+		const toc = document.getElementById("toc");
+		if (!toc) return;
+
+		for (const link of toc.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')) {
+			const id = decodeURIComponent(link.hash.slice(1));
+			const target = document.getElementById(id);
+			let hidden = false;
+
+			if (target) {
+				const block = target.closest<HTMLElement>(".lang-block");
+				hidden = (block ?? target).offsetParent === null;
+			}
+
+			link.classList.toggle("toc-lang-hidden", hidden);
+		}
+
+		// Keep the top-level TOC numbering contiguous after hiding entries.
+		let number = 0;
+		for (const link of toc.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')) {
+			if (link.classList.contains("toc-lang-hidden")) continue;
+
+			const badge = link.querySelector<HTMLElement>("[data-toc-number]");
+			if (badge) badge.textContent = String(++number);
+		}
+
+		document
+			.getElementById("active-indicator")
+			?.setAttribute("style", "opacity: 0");
+	}
+
+	function applyMode(mode: Mode) {
+		document.documentElement.dataset.postLang = mode;
+
+		for (const el of document.querySelectorAll("post-lang-switch")) {
+			(el as PostLangSwitch).reflect(mode);
+		}
+
+		syncToc();
+	}
+
+	class PostLangSwitch extends HTMLElement {
+		private buttons: HTMLButtonElement[] = [];
+
+		connectedCallback() {
+			if (!this.buttons.length) {
+				this.buttons = Array.from(
+					this.querySelectorAll<HTMLButtonElement>("button[data-lang-mode]"),
+				);
+			}
+			this.addEventListener("click", this.handleClick);
+			this.reflect(getMode());
+			requestAnimationFrame(syncToc);
+		}
+
+		disconnectedCallback() {
+			this.removeEventListener("click", this.handleClick);
+		}
+
+		private handleClick = (event: MouseEvent) => {
+			const button = (event.target as Element | null)?.closest<HTMLButtonElement>(
+				"button[data-lang-mode]",
+			);
+			if (!button || !this.contains(button)) return;
+
+			const nextMode = button.dataset.langMode;
+			if (!isMode(nextMode)) return;
+
+			try {
+				localStorage.setItem(STORAGE_KEY, nextMode);
+			} catch {
+				// ignore storage failures; the current page still switches
+			}
+			applyMode(nextMode);
+		};
+
+		reflect(mode: Mode) {
+			if (!this.buttons.length) {
+				this.buttons = Array.from(
+					this.querySelectorAll<HTMLButtonElement>("button[data-lang-mode]"),
+				);
+			}
+			for (const button of this.buttons) {
+				const active = button.dataset.langMode === mode;
+				button.classList.toggle("is-active", active);
+				button.setAttribute("aria-pressed", String(active));
+			}
+		}
+	}
+
+	if (!customElements.get("post-lang-switch")) {
+		customElements.define("post-lang-switch", PostLangSwitch);
+	}
+
+	const refresh = () => {
+		applyMode(getMode());
+		// The TOC is rebuilt by Swup after the page transition.
+		window.setTimeout(syncToc, 250);
+	};
+
+	const hookSwup = () => {
+		window.swup?.hooks.on("page:view", refresh);
+	};
+
+	if (window.swup) hookSwup();
+	else document.addEventListener("swup:enable", hookSwup);
+
+	refresh();
+</script>
