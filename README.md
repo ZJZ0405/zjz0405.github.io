@@ -28,9 +28,24 @@ Pages 的 Source 已是 `GitHub Actions`，不需要改。
 
 ## 大文件与 Git LFS
 
-论文图表等大体积二进制资源用 Git LFS 管理，当前规则是 `public/images/quantization/sliderquant/**/*.png`，见 `.gitattributes`。新增同类资源前先 `git lfs track "路径/**/*.png"` 再 `git add`，避免把 10MB 级 PNG 直接塞进普通 Git 对象。
+图片和视频统一交给 Git LFS 管理，规则写在 `.gitattributes`：
 
-`.github/workflows/deploy.yml` 的 `actions/checkout` 已开启 `lfs: true`，构建时会拉取真实图片而不是 LFS 指针。已有历史里的旧图片没有做 `git lfs migrate`（那会重写已推送历史并需要 force-push），后续大资源按上面的方式逐步迁移即可。
+- 位图：`*.png`、`*.jpg`、`*.jpeg`、`*.gif`、`*.webp`、`*.avif`、`*.bmp`、`*.tif`、`*.tiff`
+- 视频：`*.mp4`、`*.webm`、`*.mov`、`*.m4v`、`*.ogv`、`*.avi`、`*.mkv`
+
+新增资源直接 `git add` 即可，不需要再执行 `git lfs track`。SVG、ICO 和 `public/demos/*.html` 仍走普通 Git：它们体积小，或需要保留文本 diff。
+
+`.github/workflows/deploy.yml` 的 `actions/checkout` 已开启 `lfs: true`，构建时会拉取真实文件而不是 LFS 指针。
+
+历史图片和视频已用 `git lfs migrate import` 迁移，`main` 与 `theme/fuwari` 的旧提交 SHA 都已改变。旧克隆不要直接 `git pull`，请重新克隆，或执行：
+
+```bash
+git fetch origin
+git reset --hard origin/main
+git lfs pull
+```
+
+本地有未推送提交时，先 `git rebase --onto origin/main <old-base> <branch>`，不要直接 reset。
 
 ## 写文章
 
