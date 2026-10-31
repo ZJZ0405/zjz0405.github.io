@@ -107,6 +107,12 @@ HTML 更新时替换同名文件即可。iframe 加 `?embed=1` 隐藏页面外�
 
 分工上与 Quantization、LLM Engine 不重叠：量化分类讲算法与精度，这里讲量化后 kernel 的落地；引擎分类讲调度与请求链路，这里讲单个算子内部实现。
 
+## GPU Architecture 分类
+
+`src/content/posts/gpu-arch/` 按 CUDA compute capability 整理 NVIDIA SM 演进，文章统一 `category: GPU Architecture`。`intro.md` 是分类导言，`compute-capability.md` 是版本地图：1.0–12.1 的完整列表、cubin 与 `a` / `f` 编译目标的兼容规则、Blackwell 横跨 10/11/12 的原因，以及 7.5 之后的 SM 规格速查。
+
+已按五代展开：Tesla/Fermi（1.x/2.x）、Kepler/Maxwell（3.x/5.x）、Pascal/Volta/Turing（6.x/7.x）、Ampere/Ada/Hopper（8.x/9.x）、Blackwell/Rubin（10.x/11.0/12.x）。与 Kernel 分类的分工：Kernel 讲算子怎么写，这里讲硬件为什么这样设计、这些限制从哪里来。
+
 ## Tools 分类与 awesome-skills 说明
 
 `src/content/posts/tools/awesome-skills.md` 是 [awesome-skills](https://github.com/ZJZ0405/awesome-skills) 的安装与使用说明，`category: Tools`。
