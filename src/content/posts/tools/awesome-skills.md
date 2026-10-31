@@ -24,14 +24,14 @@ Claude Code 读 `~/.claude/skills`，Cursor 读 `~/.cursor/skills`，Codex、DSH
 <div class="awesome-download">
 <div class="download-info">
 <div class="download-eyebrow">Latest release</div>
-<div class="download-title">v0.1.1 预构建包</div>
-<div class="download-meta">1.7 MB · 2026-10-24 · 无需 clone / 打包</div>
-<a class="download-release-link no-styling" href="https://github.com/ZJZ0405/awesome-skills/releases/tag/v0.1.1" target="_blank" rel="noopener">release notes ↗</a> · <a class="download-release-link no-styling" href="https://github.com/ZJZ0405/awesome-skills/releases" target="_blank" rel="noopener">所有版本</a>
+<div class="download-title">v0.2.0 预构建包</div>
+<div class="download-meta">2.0 MB · 2026-11-01 · 无需 clone / 打包</div>
+<a class="download-release-link no-styling" href="https://github.com/ZJZ0405/awesome-skills/releases/tag/v0.2.0" target="_blank" rel="noopener">release notes ↗</a> · <a class="download-release-link no-styling" href="https://github.com/ZJZ0405/awesome-skills/releases" target="_blank" rel="noopener">所有版本</a>
 </div>
 <div class="download-actions">
-  <a class="download-btn no-styling" href="https://github.com/ZJZ0405/awesome-skills/releases/download/v0.1.1/awesome-skills-0.1.1.tar.gz" title="下载 awesome-skills-0.1.1.tar.gz"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>下载 .tar.gz</a>
-  <a class="download-btn secondary no-styling" href="https://github.com/ZJZ0405/awesome-skills/releases/download/v0.1.1/awesome-skills-0.1.1.tar.gz.sha256" title="下载 awesome-skills-0.1.1.tar.gz.sha256">SHA-256</a>
-  <a class="download-btn secondary no-styling" href="https://github.com/ZJZ0405/awesome-skills/releases/download/v0.1.1/awesome-skills-0.1.1.zip" title="下载 awesome-skills-0.1.1.zip">.zip</a>
+  <a class="download-btn no-styling" href="https://github.com/ZJZ0405/awesome-skills/releases/download/v0.2.0/awesome-skills-0.2.0.tar.gz" title="下载 awesome-skills-0.2.0.tar.gz"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>下载 .tar.gz</a>
+  <a class="download-btn secondary no-styling" href="https://github.com/ZJZ0405/awesome-skills/releases/download/v0.2.0/awesome-skills-0.2.0.tar.gz.sha256" title="下载 awesome-skills-0.2.0.tar.gz.sha256">SHA-256</a>
+  <a class="download-btn secondary no-styling" href="https://github.com/ZJZ0405/awesome-skills/releases/download/v0.2.0/awesome-skills-0.2.0.zip" title="下载 awesome-skills-0.2.0.zip">.zip</a>
 </div>
 </div>
 <!-- awesome-skills:download:end -->
@@ -123,7 +123,7 @@ skills/<name>/
 覆盖画图、论文阅读、实验分析、前端、MCP、测试和交接这些方向。下面的清单直接取上游 `catalog.json`，描述保留英文原文，方便和仓库里的 `SKILL.md` 对照。
 
 <!-- awesome-skills:catalog:start -->
-> 数据源：[awesome-skills](https://github.com/ZJZ0405/awesome-skills) [`v0.1.1`](https://github.com/ZJZ0405/awesome-skills/releases/tag/v0.1.1) · 最近提交 [`946a811`](https://github.com/ZJZ0405/awesome-skills/commit/946a8116c19b818477584a0f72476fd504a63ab8)（2026-10-31）
+> 数据源：[awesome-skills](https://github.com/ZJZ0405/awesome-skills) [`v0.1.1`](https://github.com/ZJZ0405/awesome-skills/releases/tag/v0.1.1) · 最近提交 [`f47867f`](https://github.com/ZJZ0405/awesome-skills/commit/f47867f1f9be2b45c942bf9144ec6cabe5b70461)（2026-11-01）
 >
 > **17** 个技能 · **80** 个工具别名 · 原创 2 个（`handoff`、`shell-review`），其余 15 个收录自上游。
 >
