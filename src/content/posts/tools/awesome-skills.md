@@ -1,7 +1,7 @@
 ---
 title: "awesome-skills 使用说明：一个仓库带走所有 agent 技能"
 published: 2026-10-26
-updated: 2026-10-26
+updated: 2026-11-01
 description: "从打包、校验到离线安装：把同一套 agent 技能接进 Claude Code、Codex、Cursor、DSH 等工具，并让这份说明跟着上游仓库自动更新。"
 tags: [Agent Skills, 工具链, 离线安装, GitHub Actions]
 category: Tools
@@ -123,7 +123,7 @@ skills/<name>/
 覆盖画图、论文阅读、实验分析、前端、MCP、测试和交接这些方向。下面的清单直接取上游 `catalog.json`，描述保留英文原文，方便和仓库里的 `SKILL.md` 对照。
 
 <!-- awesome-skills:catalog:start -->
-> 数据源：[awesome-skills](https://github.com/ZJZ0405/awesome-skills) [`v0.1.1`](https://github.com/ZJZ0405/awesome-skills/releases/tag/v0.1.1) · 最近提交 [`d9884e1`](https://github.com/ZJZ0405/awesome-skills/commit/d9884e1b0aa04dc37d3a24ecb5149acffc124806)（2026-10-25）
+> 数据源：[awesome-skills](https://github.com/ZJZ0405/awesome-skills) [`v0.1.1`](https://github.com/ZJZ0405/awesome-skills/releases/tag/v0.1.1) · 最近提交 [`946a811`](https://github.com/ZJZ0405/awesome-skills/commit/946a8116c19b818477584a0f72476fd504a63ab8)（2026-10-31）
 >
 > **17** 个技能 · **80** 个工具别名 · 原创 2 个（`handoff`、`shell-review`），其余 15 个收录自上游。
 >
