@@ -95,6 +95,8 @@ HTML 更新时替换同名文件即可。iframe 加 `?embed=1` 隐藏页面外�
 
 `sliderquant.md` 与 `spinquant.md` 分别是 ICLR 2026 SliderQuant、ICLR 2025 SpinQuant 的 source-grounded 中英对照精读，图表放在 `public/images/quantization/{sliderquant,spinquant}/`。双语正文用 `:::en` / `:::zh` 容器指令包裹对应语言（由 `src/plugins/rehype-component-language.mjs` 渲染成 `.lang-block`），frontmatter 设 `bilingual: true` 后，文章标题下方会出现带「语言 / Language」标签的三态开关 **中英对照 / 中文 / English**。`PostLangSwitch.astro` 把选择存进 localStorage 并同步 TOC，`Layout.astro` 在首屏前写入 `data-post-lang` 避免语言闪烁；EN 模式下只显示 `:::en` 块，TOC 里指向中文专属章节的条目会自动隐藏并重新编号。SpinQuant 那篇进一步把元数据、四段读前预备（N001–N004）、7 处补充推导（D1–D7）、式号/术语索引与阅读提示整段包进 `:::zh`，可以作为“英文只留论文正文、中文额外加料”的模板；后续再做双语长文可以直接复用这套标记。
 
+`llm-compressor.md` 与 `nncf.md` 是两个压缩工具链的导览：前者讲 vLLM 生态的 PTQ 流程（`oneshot` / `model_free_ptq`、GPTQ/AWQ、FP8/NVFP4、compressed-tensors、vLLM 部署与评测），后者讲 Intel OpenVINO 生态的 NNCF（PTQ、权重压缩、AWQ/SE/GPTQ、QAT、剪枝、精度控制与 Optimum Intel 集成）。两篇都按“安装 → 入口 → 配方 → 选型 → 坑”组织，代码可直接对照官方文档。
+
 ## Kernel 分类
 
 `src/content/posts/kernel/` 收 GPU 算子相关笔记，文章统一 `category: Kernel`。`intro.md` 是分类导言，写明关注范围（执行模型、内存层级、GEMM / Attention、低精度融合、工具链、性能分析）与写作约定，并按 CUDA → Triton → TileLang 的顺序串起三篇手册：

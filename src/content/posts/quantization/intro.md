@@ -1,6 +1,7 @@
 ---
 title: "Quantization：低精度推理笔记开篇"
 published: 2026-10-26
+updated: 2026-11-01
 description: 新开 Quantization 分类，用来整理 FP8/INT4 等低精度格式、量化算法、KV Cache 压缩、kernel 实现与精度评测。
 tags: [Quantization, 推理优化, 低精度]
 category: Quantization
@@ -29,3 +30,5 @@ draft: false
 想先看论文的话，[量化论文汇总：从 INT8 到 FP4 的阅读地图](/posts/quantization/papers/) 按主题整理了 70 篇左右主线工作，包括基础 PTQ/QAT、outlier、GPTQ/AWQ、旋转 W4A4、KV cache、FP8/FP4 和系统 kernel，并给出三条阅读路线与选型建议。
 
 如果准备精读某一篇，两篇中英对照精读可以当模板：[SliderQuant](/posts/quantization/sliderquant/) 与 [SpinQuant](/posts/quantization/spinquant/)。它们逐块给出原文页码、英文原文与中文译文，图表紧裁切内嵌，页面头部可以在 **中英对照 / 中文 / English** 之间切换；SpinQuant 那篇还带了 RMSNorm / 残差流 / RoPE / Hadamard 四段读前预备和 7 处补充推导。
+
+想把算法直接落到工具链上，可以看 [llm-compressor](/posts/quantization/llm-compressor/) 与 [NNCF](/posts/quantization/nncf/)：前者面向 vLLM/GPU，用 recipe 组合 GPTQ/AWQ/FP8/NVFP4；后者面向 OpenVINO/Intel 平台，覆盖 PTQ、权重压缩、QAT 与剪枝。两篇都给出安装、最小配方和选型注意事项。
