@@ -210,7 +210,7 @@ ncu --metrics sm__throughput.avg.pct_of_peak_sustained_elapsed,\
 dram__throughput.avg.pct_of_peak_sustained_elapsed ./gemm
 ```
 
-`nsys` 的安装、NVTX 标注和报告阅读见 [Nsight Systems 手册](/posts/tools/nsys/)。读 `ncu` 报告先看两个 throughput：SM 利用率高说明 compute-bound，DRAM 利用率高说明 memory-bound，两者都不高通常是 latency-bound（occupancy 不够、依赖链太长、同步太多）。再看 warp stall reason，常见的是 `long_scoreboard`（等 global）、`barrier`、`mio_throttle`（shared 压力）。
+`nsys` 的安装、NVTX 标注和报告阅读见 [Nsight Systems 手册](/posts/tools/nsys/)；`ncu` 的权限、过滤、section / metric 和报告阅读见 [Nsight Compute 手册](/posts/tools/ncu/)。读 `ncu` 报告先看两个 throughput：SM 利用率高说明 compute-bound，DRAM 利用率高说明 memory-bound，两者都不高通常是 latency-bound（occupancy 不够、依赖链太长、同步太多）。再看 warp stall reason，常见的是 `long_scoreboard`（等 global）、`barrier`、`mio_throttle`（shared 压力）。
 
 ## 优化检查清单
 
