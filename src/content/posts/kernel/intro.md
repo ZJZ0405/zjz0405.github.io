@@ -19,7 +19,7 @@ draft: false
 - **低精度与融合**：FP8 / FP4 的 dequant 融合、W4A16 / W8A8、per-group scale 布局，以及 Tensor Core / Matrix Core 的对齐约束。
 - **工具链**：CUDA C++、Triton、CUTLASS / CuTe，编译选项、autotune 和边界 shape 的处理。
 - **库与框架**：DeepGEMM 这类面向 LLM 的 kernel 库，dense / grouped GEMM、per-block scale 布局、MoE 融合与 JIT 特化。
-- **性能分析**：Nsight Compute 指标怎么读，用 roofline 判断瓶颈在带宽还是算力，而不是只看总耗时下结论。
+- **性能分析**：先用 [Nsight Systems](/posts/tools/nsys/) 看 CPU/GPU 时间线，再用 Nsight Compute 读单 kernel 指标，用 roofline 判断瓶颈在带宽还是算力，而不是只看总耗时下结论。
 
 ## 写作约定
 

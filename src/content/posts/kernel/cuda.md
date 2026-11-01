@@ -201,16 +201,16 @@ compute-sanitizer --tool racecheck ./vec_add      # shared memory 竞争
 compute-sanitizer --tool synccheck ./vec_add      # 非法 barrier
 ```
 
-性能分析用 Nsight Compute / Nsight Systems：
+性能分析先用 Nsight Systems 看时间线，再用 Nsight Compute 看单 kernel：
 
 ```bash
+nsys profile -t cuda,nvtx,osrt --stats=true -o gemm ./gemm
 ncu --set full --kernel-name regex:gemm ./gemm
 ncu --metrics sm__throughput.avg.pct_of_peak_sustained_elapsed,\
 dram__throughput.avg.pct_of_peak_sustained_elapsed ./gemm
-nsys profile --stats=true ./gemm
 ```
 
-读 `ncu` 报告先看两个 throughput：SM 利用率高说明 compute-bound，DRAM 利用率高说明 memory-bound，两者都不高通常是 latency-bound（occupancy 不够、依赖链太长、同步太多）。再看 warp stall reason，常见的是 `long_scoreboard`（等 global）、`barrier`、`mio_throttle`（shared 压力）。
+`nsys` 的安装、NVTX 标注和报告阅读见 [Nsight Systems 手册](/posts/tools/nsys/)。读 `ncu` 报告先看两个 throughput：SM 利用率高说明 compute-bound，DRAM 利用率高说明 memory-bound，两者都不高通常是 latency-bound（occupancy 不够、依赖链太长、同步太多）。再看 warp stall reason，常见的是 `long_scoreboard`（等 global）、`barrier`、`mio_throttle`（shared 压力）。
 
 ## 优化检查清单
 
@@ -248,4 +248,4 @@ CUDA 是基准层：Triton 和 TileLang 最终都生成 CUDA C 或 PTX，再交�
 - [CUDA C++ Best Practices Guide](https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html)
 - [PTX ISA](https://docs.nvidia.com/cuda/parallel-thread-execution/index.html)
 - [CUTLASS](https://github.com/NVIDIA/cutlass)
-- [Nsight Compute](https://developer.nvidia.com/nsight-compute) / [Compute Sanitizer](https://docs.nvidia.com/compute-sanitizer/ComputeSanitizer/index.html)
+- [Nsight Systems](https://developer.nvidia.com/nsight-systems) / [Nsight Compute](https://developer.nvidia.com/nsight-compute) / [Compute Sanitizer](https://docs.nvidia.com/compute-sanitizer/ComputeSanitizer/index.html)

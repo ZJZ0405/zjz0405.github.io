@@ -22,7 +22,7 @@ pnpm preview   # 预览构建结果
 
 推送到 `main` 触发 `.github/workflows/deploy.yml`，用 `pnpm build` 构建后发布。
 
-`.github/workflows/sync-awesome-skills.yml` 每天同步一次 Tools 说明，有变化时提交并显式触发一次部署。
+`.github/workflows/sync-awesome-skills.yml` 每天同步一次 awesome-skills 说明，有变化时提交并显式触发一次部署。
 
 Pages 的 Source 已是 `GitHub Actions`，不需要改。
 
@@ -118,11 +118,16 @@ DeepGEMM 归在 Kernel 而不是 Tools：它交付的是算子实现本身，不
 
 已按五代展开：Tesla/Fermi（1.x/2.x）、Kepler/Maxwell（3.x/5.x）、Pascal/Volta/Turing（6.x/7.x）、Ampere/Ada/Hopper（8.x/9.x）、Blackwell/Rubin（10.x/11.0/12.x）。与 Kernel 分类的分工：Kernel 讲算子怎么写，这里讲硬件为什么这样设计、这些限制从哪里来。
 
-## Tools 分类与 awesome-skills 说明
+## Tools 分类
 
-`src/content/posts/tools/awesome-skills.md` 是 [awesome-skills](https://github.com/ZJZ0405/awesome-skills) 的安装与使用说明，`category: Tools`。
+`src/content/posts/tools/` 收开发、观测和部署工具的使用说明，文章统一 `category: Tools`。
 
-文章里只有两组标记块内的版本号、技能表、工具别名数和最新 release 下载按钮由脚本生成，正文手写：
+- `nsys.md`：Nsight Systems 系统级 profiler 手册，覆盖安装、采集参数、NVTX 标注、GUI 时间线、stats / SQLite 报告，以及 LLM 训练 / 推理场景。
+- `awesome-skills.md`：[awesome-skills](https://github.com/ZJZ0405/awesome-skills) 的安装与使用说明。
+
+Nsight Systems 归在 Tools 而不是 Kernel：它不交付算子实现，观测对象是进程树、CPU 调度、CUDA API 和 GPU 时间线；Kernel 分类里的性能分析只把它当作入口，安装、参数和报告解读放在这里。也不归 LLM Engine：它不负责推理框架的调度逻辑，而是观测这些逻辑的运行结果。
+
+`awesome-skills.md` 里只有两组标记块内的版本号、技能表、工具别名数和最新 release 下载按钮由脚本生成，正文手写：
 
 ```md
 <!-- awesome-skills:catalog:start -->
