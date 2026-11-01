@@ -18,6 +18,7 @@ draft: false
 - **核心算子**：GEMM 的分层 tiling 与 epilogue、FlashAttention 的 online softmax、reduction / scan、top-k 采样、MoE 路由和 KV Cache 搬运。
 - **低精度与融合**：FP8 / FP4 的 dequant 融合、W4A16 / W8A8、per-group scale 布局，以及 Tensor Core / Matrix Core 的对齐约束。
 - **工具链**：CUDA C++、Triton、CUTLASS / CuTe，编译选项、autotune 和边界 shape 的处理。
+- **库与框架**：DeepGEMM 这类面向 LLM 的 kernel 库，dense / grouped GEMM、per-block scale 布局、MoE 融合与 JIT 特化。
 - **性能分析**：Nsight Compute 指标怎么读，用 roofline 判断瓶颈在带宽还是算力，而不是只看总耗时下结论。
 
 ## 写作约定
@@ -33,3 +34,5 @@ draft: false
 - [TileLang 手册：Tile 级 DSL 与 Tensor Core 算子](/posts/kernel/tilelang/)：显式 tile 的 GEMM/Attention 写法，以及多后端编译。
 
 三篇都是手册性质，会随着实践继续补例子和踩坑记录。
+
+手册讲“怎么写”，库讲“生产环境里已经怎么选”。写完这三篇之后可以接上 [DeepGEMM 内核库](/posts/kernel/deepgemm/)：它把 tile、流水线、scale 布局和 MoE 分组封装成一套 JIT kernel，适合拿来对照前面手写的 GEMM，看看工业级实现把哪些决策固定下来了。

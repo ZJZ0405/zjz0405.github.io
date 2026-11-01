@@ -99,11 +99,14 @@ HTML 更新时替换同名文件即可。iframe 加 `?embed=1` 隐藏页面外�
 
 ## Kernel 分类
 
-`src/content/posts/kernel/` 收 GPU 算子相关笔记，文章统一 `category: Kernel`。`intro.md` 是分类导言，写明关注范围（执行模型、内存层级、GEMM / Attention、低精度融合、工具链、性能分析）与写作约定，并按 CUDA → Triton → TileLang 的顺序串起三篇手册：
+`src/content/posts/kernel/` 收 GPU 算子相关笔记，文章统一 `category: Kernel`。`intro.md` 是分类导言，写明关注范围（执行模型、内存层级、GEMM / Attention、低精度融合、工具链、库与框架、性能分析）与写作约定，并按 CUDA → Triton → TileLang → DeepGEMM 的顺序串起三篇手册和一篇库分析：
 
 - `cuda.md`：执行模型、内存层级、vector add 与分块 GEMM、nvcc / Nsight / compute-sanitizer、优化清单。
 - `triton.md`：program instance 模型、softmax / matmul、TTIR→TTGIR→PTX、autotune、调试与 Gluon。
 - `tilelang.md`：`T.Kernel` / `T.copy` / `T.gemm` / `T.Pipelined`、GEMM 实例、autotune、IR trace 与多后端。
+- `deepgemm.md`：DeepGEMM 的定位、`D = C + A @ B` 布局、SM90/SM100 的 SF 契约、dense / grouped / masked GEMM、DeepSeek-V3.2 indexer 的 MQA logits、Mega MoE，以及 DeepJIT 与性能边界。
+
+DeepGEMM 归在 Kernel 而不是 Tools：它交付的是算子实现本身，不是开发或安装工具；也不归 LLM Engine，因为它不负责调度和请求链路。
 
 后续按主题平铺或分子目录即可，侧栏分类计数会自动更新。
 
