@@ -17,7 +17,7 @@ draft: false
 - **内存层级**：合并访存、bank conflict、shared memory 布局、`cp.async` 与 TMA、L2 复用，以及在 HBM 带宽约束下于 roofline 上的位置。
 - **核心算子**：GEMM 的分层 tiling 与 epilogue、FlashAttention 的 online softmax、reduction / scan、top-k 采样、MoE 路由和 KV Cache 搬运。
 - **低精度与融合**：FP8 / FP4 的 dequant 融合、W4A16 / W8A8、per-group scale 布局，以及 Tensor Core / Matrix Core 的对齐约束。
-- **工具链**：CUDA C++、Triton、CUTLASS / CuTe，编译选项、autotune 和边界 shape 的处理。
+- **工具链**：CUDA C++、Triton、CUTLASS / CuTe，编译选项、autotune、分离编译与链接，以及边界 shape 的处理。
 - **库与框架**：DeepGEMM 这类面向 LLM 的 kernel 库，dense / grouped GEMM、per-block scale 布局、MoE 融合与 JIT 特化。
 - **性能分析**：先用 [Nsight Systems](/posts/tools/nsys/) 看 CPU/GPU 时间线，再用 Nsight Compute 读单 kernel 指标，用 roofline 判断瓶颈在带宽还是算力，而不是只看总耗时下结论。
 
@@ -36,3 +36,5 @@ draft: false
 三篇都是手册性质，会随着实践继续补例子和踩坑记录。
 
 手册讲“怎么写”，库讲“生产环境里已经怎么选”。写完这三篇之后可以接上 [DeepGEMM 内核库](/posts/kernel/deepgemm/)：它把 tile、流水线、scale 布局和 MoE 分组封装成一套 JIT kernel，适合拿来对照前面手写的 GEMM，看看工业级实现把哪些决策固定下来了。
+
+再往上走一层是“组件之间怎么组合”。[PipeLink](/posts/kernel/pipelink/) 讨论的是另一个问题：当 load、mainloop、epilogue、通信这些部分由不同团队、不同库分别编译时，怎样把它们链接成一个 kernel，而不在边界上付 launch、访存和 overlap 的代价。前面几篇讲单个 kernel 内部怎么写、怎么选，这一篇讲 kernel 的组成部分怎么拼。

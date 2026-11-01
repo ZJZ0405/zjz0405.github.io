@@ -99,14 +99,17 @@ HTML 更新时替换同名文件即可。iframe 加 `?embed=1` 隐藏页面外�
 
 ## Kernel 分类
 
-`src/content/posts/kernel/` 收 GPU 算子相关笔记，文章统一 `category: Kernel`。`intro.md` 是分类导言，写明关注范围（执行模型、内存层级、GEMM / Attention、低精度融合、工具链、库与框架、性能分析）与写作约定，并按 CUDA → Triton → TileLang → DeepGEMM 的顺序串起三篇手册和一篇库分析：
+`src/content/posts/kernel/` 收 GPU 算子相关笔记，文章统一 `category: Kernel`。`intro.md` 是分类导言，写明关注范围（执行模型、内存层级、GEMM / Attention、低精度融合、工具链、库与框架、性能分析）与写作约定，并按 CUDA → Triton → TileLang → DeepGEMM → PipeLink 的顺序串起三篇手册、一篇库分析和一篇链接器分析：
 
 - `cuda.md`：执行模型、内存层级、vector add 与分块 GEMM、nvcc / Nsight / compute-sanitizer、优化清单。
 - `triton.md`：program instance 模型、softmax / matmul、TTIR→TTGIR→PTX、autotune、调试与 Gluon。
 - `tilelang.md`：`T.Kernel` / `T.copy` / `T.gemm` / `T.Pipelined`、GEMM 实例、autotune、IR trace 与多后端。
 - `deepgemm.md`：DeepGEMM 的定位、`D = C + A @ B` 布局、SM90/SM100 的 SF 契约、dense / grouped / masked GEMM、DeepSeek-V3.2 indexer 的 MQA logits、Mega MoE，以及 DeepJIT 与性能边界。
+- `pipelink.md`：PipeLink 的组件契约（handle、生命周期、协议、事实）、44 条检查规则、Z3 放置求解、生成的 tensor 搬运与 nvJitLink 折叠，四个案例（跨库 megakernel、四 owner MoE、一个 attention core 七个变体、GEMM + SwiGLU），以及 `pipec2` 上手与边界。
 
 DeepGEMM 归在 Kernel 而不是 Tools：它交付的是算子实现本身，不是开发或安装工具；也不归 LLM Engine，因为它不负责调度和请求链路。
+
+PipeLink 同样归在 Kernel：它交付的是把算子组件组合成一个 kernel 的编译与链接路径，讨论对象仍是 SM 上的 shared memory、barrier、warp 和寄存器；也不归 Tools，因为它不是装来就用的观测或开发工具，而是 kernel 构建流程的一部分。
 
 后续按主题平铺或分子目录即可，侧栏分类计数会自动更新。
 
