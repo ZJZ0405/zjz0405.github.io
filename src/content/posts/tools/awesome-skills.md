@@ -123,7 +123,7 @@ skills/<name>/
 覆盖画图、论文阅读、实验分析、前端、MCP、测试和交接这些方向。下面的清单直接取上游 `catalog.json`，描述保留英文原文，方便和仓库里的 `SKILL.md` 对照。
 
 <!-- awesome-skills:catalog:start -->
-> 数据源：[awesome-skills](https://github.com/ZJZ0405/awesome-skills) [`v0.1.1`](https://github.com/ZJZ0405/awesome-skills/releases/tag/v0.1.1) · 最近提交 [`f47867f`](https://github.com/ZJZ0405/awesome-skills/commit/f47867f1f9be2b45c942bf9144ec6cabe5b70461)（2026-11-01）
+> 数据源：[awesome-skills](https://github.com/ZJZ0405/awesome-skills) [`v0.2.0`](https://github.com/ZJZ0405/awesome-skills/releases/tag/v0.2.0) · 最近提交 [`f47867f`](https://github.com/ZJZ0405/awesome-skills/commit/f47867f1f9be2b45c942bf9144ec6cabe5b70461)（2026-11-01）
 >
 > **17** 个技能 · **80** 个工具别名 · 原创 2 个（`handoff`、`shell-review`），其余 15 个收录自上游。
 >
