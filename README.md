@@ -127,11 +127,14 @@ PipeLink 同样归在 Kernel：它交付的是把算子组件组合成一个 ker
 
 - `nsys.md`：Nsight Systems 系统级 profiler 手册，覆盖安装、采集参数、NVTX 标注、GUI 时间线、stats / SQLite 报告，以及 LLM 训练 / 推理场景。
 - `ncu.md`：Nsight Compute 单 kernel profiler 手册，覆盖权限、kernel 过滤、set / section / metric 采集、SOL / occupancy / warp stall / memory tables / source counters / roofline 的读法，以及官方样例报告解读。
+- `torch-profiler.md`：PyTorch 内置 profiler 手册，覆盖 Kineto / CUPTI 原理、最小采集、统计表列语义、schedule 稳态窗口、Chrome trace / Perfetto / TensorBoard、`record_function` 标注、shape / stack、显存与分布式场景。
 - `awesome-skills.md`：[awesome-skills](https://github.com/ZJZ0405/awesome-skills) 的安装与使用说明。
 
 Nsight Systems 归在 Tools 而不是 Kernel：它不交付算子实现，观测对象是进程树、CPU 调度、CUDA API 和 GPU 时间线；Kernel 分类里的性能分析只把它当作入口，安装、参数和报告解读放在这里。也不归 LLM Engine：它不负责推理框架的调度逻辑，而是观测这些逻辑的运行结果。
 
 Nsight Compute 同样归在 Tools：和 nsys 一样，它交付的是采集方法与报告解读，不是算子实现；Kernel 分类只把 `ncu` 当作性能分析入口。两者一个看系统时间线，一个看单 kernel 内部，正好互补。
+
+PyTorch Profiler 也归在 Tools：它交付的是框架级观测与报告解读，不交付算子实现；Kernel 分类只把它当作定位入口。也不归 LLM Engine：它不绑定推理框架，训练、推理、单机、多卡都用同一套 API。它补的是 nsys / ncu 之间的空档——nsys 看系统时间线，ncu 看单 kernel 内部，torch.profiler 先把时间归因到具体的 op、模块和 shape，必要时再归因显存。
 
 `awesome-skills.md` 里只有两组标记块内的版本号、技能表、工具别名数和最新 release 下载按钮由脚本生成，正文手写：
 

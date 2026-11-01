@@ -34,7 +34,7 @@ Nsight Systems（命令行是 `nsys`）是 NVIDIA 的系统级 profiler。它把
 | :--- | :--- | :--- |
 | Nsight Systems (`nsys`) | 系统级时间线、CPU-GPU 重叠、多 stream、通信、IO、启动间隔 | 单个 kernel 内部的 stall、occupancy、指令级指标 |
 | Nsight Compute (`ncu`) | 单 kernel 的硬件计数器、roofline、source correlation | 长时间线的全局关系；会 replay kernel，改变时序 |
-| PyTorch Profiler | 算子级耗时、框架 op、显存、Chrome trace | 系统级上下文、跨进程 / IO / OS runtime 较少 |
+| [PyTorch Profiler](/posts/tools/torch-profiler/) | 算子级耗时、框架 op、显存、Chrome trace | 系统级上下文、跨进程 / IO / OS runtime 较少 |
 
 选择顺序通常是：nsys 看到某个阶段 GPU 空转，或者发现 kernel 之间有大段间隔；定位到具体 kernel 或调度间隙后，如果还想知道 kernel 内部为什么慢，再对那个 kernel 跑 ncu。
 
