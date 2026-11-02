@@ -95,6 +95,13 @@ vLLM 除图集外还有两篇按代码组织的机制长文，不含 iframe，�
 
 两篇互为上下篇：KV 篇讲“块怎么管”，调度篇讲“块怎么分给不断变动的 batch”。
 
+SGLang 也有两篇按代码组织的机制长文，口径为 SGLang `main` @ `a99c7d0`（2026-11）：
+
+- `sglang/kv-cache.md`：从显存账出发，讲 `ReqToTokenPool` / `TokenToKVPoolAllocator` / `KVCache` / `RadixCache` 四层分工、`page_size=1` 的 token 级分配、RadixAttention 的 match/insert/split、`lock_ref` 与 LRU/LFU/SLRU/TLRU 驱逐、HiCache 的 L1/L2/L3，以及 SWA/Mamba/MLA 的多池结构。
+- `sglang/continuous-batching.md`：讲 SGLang 的 `event_loop` 怎么每步重排、`PrefillAdder` 怎么按前缀命中和 token/KV 预算准入、chunked prefill 怎么切、KV 不够时怎么 retract、overlap scheduler 怎么把 CPU 调度藏到 GPU 后面，以及 `lpm` / `dfs-weight` / in-batch prefix caching 这些缓存感知策略。
+
+两篇同样互为上下篇：KV 篇讲“槽位怎么管”，调度篇讲“槽位怎么分给不断变动的 batch”。
+
 ## Quantization 分类
 
 `src/content/posts/quantization/` 收低精度推理相关笔记，文章统一 `category: Quantization`。

@@ -40,3 +40,8 @@ SGLang 的一条 `/v1/responses` 请求可以拆成网关和引擎两段：SMG �
 ## 两层缓存怎么衔接
 
 网关的 `cache_aware` 前缀树决定请求落到哪个 worker，引擎的 Radix 缓存决定这个 worker 上能复用多少 KV。网关命中只说明这个 worker 见过相似前缀；真正省掉多少 prefill，还要看引擎侧命中多少 token。两边都会把这次的新前缀写回各自的树。
+
+## 延伸阅读
+
+- [SGLang 的 KV Cache：RadixAttention、分页池与 HiCache](/posts/llm-engine/sglang/kv-cache/)
+- [SGLang 的 Continuous Batching：RadixAttention 感知的调度器](/posts/llm-engine/sglang/continuous-batching/)
