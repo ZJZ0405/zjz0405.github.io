@@ -79,14 +79,21 @@ draft: false
 
 ## LLM Engine 图集
 
-`src/content/posts/llm-engine/` 按引擎整理，一个引擎一篇，文章统一 `category: LLM Engine`。
-正文按图分节，用 iframe 引用 `public/demos/llm-engine/<engine>/` 下的自包含 HTML：
+`src/content/posts/llm-engine/` 按引擎整理，图集环节一个引擎一篇，文章统一 `category: LLM Engine`。
+图集正文按图分节，用 iframe 引用 `public/demos/llm-engine/<engine>/` 下的自包含 HTML：
 
 - vLLM：`vllm/index.md`（1 张：聊天补全请求）
 - SGLang：`sglang/index.md`（2 张：网关请求、引擎请求）
 - DeepInfer：`deepinfer/index.md`（3 张：事件拓扑、单请求时序、调度与 KV）
 
 HTML 更新时替换同名文件即可。iframe 加 `?embed=1` 隐藏页面外壳只留图，`?present=1` 进入演示模式。
+
+vLLM 除图集外还有两篇按代码组织的机制长文，不含 iframe，口径为 vLLM `main` @ `fa2881ed19`（2026-11）：
+
+- `vllm/kv-cache.md`：从显存账出发，讲 `block_table` / `slot_mapping` 寻址、`KVCacheBlock` 与 `FreeKVCacheBlockQueue`、引用计数与 LRU 驱逐、链式哈希前缀缓存，以及 `allocate_slots()` 的块布局。
+- `vllm/continuous-batching.md`：讲 v1 为什么没有 prefill/decode 阶段、token 预算怎么切 chunked prefill、块不够时怎么按 `running[-1]` 抢占并 recompute、`SchedulerOutput` 怎么变成一次 varlen 前向，以及 TTFT / ITL / 吞吐的取舍。
+
+两篇互为上下篇：KV 篇讲“块怎么管”，调度篇讲“块怎么分给不断变动的 batch”。
 
 ## Quantization 分类
 
